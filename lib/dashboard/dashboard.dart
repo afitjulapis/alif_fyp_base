@@ -75,14 +75,14 @@ class _DashboardState extends State<Dashboard> {
                       borderRadius: BorderRadius.circular(10),
                       // border: Border.all(color: ref.watch(truegray),width:2)
                     ),
-                    child: Stack(
+                    child: Stack( // overlap element
                       children: [
                         Padding(
                           padding: EdgeInsets.only(top: h*0.08,bottom: h*0.0 ,left: w*0.04,right: w*0.04),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Expanded(
+                              Expanded( //  auto kembang saiz nya\
                                 child: Container(
                                   // width: w*0.3,
                                   height: h*0.07,
