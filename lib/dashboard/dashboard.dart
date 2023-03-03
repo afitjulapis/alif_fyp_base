@@ -1,3 +1,4 @@
+import 'package:e_pibg/pelajar/senaraiPelajar.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttericon/font_awesome5_icons.dart';
 
@@ -68,61 +69,67 @@ class _DashboardState extends State<Dashboard> {
             Row(
               children: [
                 Expanded(
-                  child: Container(
-                    padding:  EdgeInsets.only(top: h*0.0,bottom: h*0.0 ,left: w*0.02,right: w*0.02),
-                    decoration: BoxDecoration(
-                      color: Colors.transparent,
-                      borderRadius: BorderRadius.circular(10),
-                      // border: Border.all(color: ref.watch(truegray),width:2)
-                    ),
-                    child: Stack( // overlap element
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.only(top: h*0.08,bottom: h*0.0 ,left: w*0.04,right: w*0.04),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Expanded( //  auto kembang saiz nya\
-                                child: Container(
-                                  // width: w*0.3,
-                                  height: h*0.07,
-                                  padding:  EdgeInsets.only(top: h*0.0,bottom: h*0.0 ,left: w*0.04,right: w*0.04),
-                                  decoration: BoxDecoration(
-                                    color: Colors.yellow,
-                                    borderRadius: BorderRadius.circular(5),
-                                    border: Border.all(color: Colors.yellow,width:2)
-                                  ),
-                                  child: Center(
-                                    child: Container(
-                                      // width: w*0.6,
-                                      child: Text('HEP',style: TextStyle(fontSize:h*0.015,fontWeight: FontWeight.bold,color: Colors.white),textAlign: TextAlign.center,overflow: TextOverflow.ellipsis,maxLines: 6,)
+                  child: InkWell(
+                    onTap: (){
+                      Navigator.push(context,MaterialPageRoute(builder: (context) => SenaraiPelajar())); // mcm hyperlink
+
+                    },
+                    child: Container(
+                      padding:  EdgeInsets.only(top: h*0.0,bottom: h*0.0 ,left: w*0.02,right: w*0.02),
+                      decoration: BoxDecoration(
+                        color: Colors.transparent,
+                        borderRadius: BorderRadius.circular(10),
+                        // border: Border.all(color: ref.watch(truegray),width:2)
+                      ),
+                      child: Stack( // overlap element
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.only(top: h*0.08,bottom: h*0.0 ,left: w*0.04,right: w*0.04),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Expanded( //  auto kembang saiz nya\
+                                  child: Container(
+                                    // width: w*0.3,
+                                    height: h*0.07,
+                                    padding:  EdgeInsets.only(top: h*0.0,bottom: h*0.0 ,left: w*0.04,right: w*0.04),
+                                    decoration: BoxDecoration(
+                                      color: Colors.yellow,
+                                      borderRadius: BorderRadius.circular(5),
+                                      border: Border.all(color: Colors.yellow,width:2)
+                                    ),
+                                    child: Center(
+                                      child: Container(
+                                        // width: w*0.6,
+                                        child: Text('HEP',style: TextStyle(fontSize:h*0.015,fontWeight: FontWeight.bold,color: Colors.white),textAlign: TextAlign.center,overflow: TextOverflow.ellipsis,maxLines: 6,)
+                                      ),
                                     ),
                                   ),
                                 ),
+                              ],
+                            ),
+                          ),
+                  
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Container(
+                                width: h*0.1,
+                                height: h*0.1,
+                                padding:  EdgeInsets.only(top: h*0.0,bottom: h*0.0 ,left: w*0.04,right: w*0.04),
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(h),
+                                  border: Border.all(color: Colors.yellow,width:2)
+                                ),
+                                child: Icon(FontAwesome5.sitemap,color: Colors.yellow, size: h*0.03,)
                               ),
                             ],
                           ),
-                        ),
-
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Container(
-                              width: h*0.1,
-                              height: h*0.1,
-                              padding:  EdgeInsets.only(top: h*0.0,bottom: h*0.0 ,left: w*0.04,right: w*0.04),
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(h),
-                                border: Border.all(color: Colors.yellow,width:2)
-                              ),
-                              child: Icon(FontAwesome5.sitemap,color: Colors.yellow, size: h*0.03,)
-                            ),
-                          ],
-                        ),
-
-                        
-                      ],
+                  
+                          
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -280,7 +287,7 @@ class _DashboardState extends State<Dashboard> {
                                   child: Center(
                                     child: Container(
                                       // width: w*0.6,
-                                      child: Text('PEPERIKSAAN',style: TextStyle(fontSize:h*0.015,fontWeight: FontWeight.bold,color: Colors.white),textAlign: TextAlign.center,overflow: TextOverflow.ellipsis,maxLines: 6,)
+                                      child: Text('PILIH SUBJEK',style: TextStyle(fontSize:h*0.015,fontWeight: FontWeight.bold,color: Colors.white),textAlign: TextAlign.center,overflow: TextOverflow.ellipsis,maxLines: 6,)
                                     ),
                                   ),
                                 ),
@@ -301,7 +308,7 @@ class _DashboardState extends State<Dashboard> {
                                 borderRadius: BorderRadius.circular(h),
                                 border: Border.all(color: Colors.red,width:2)
                               ),
-                              child: Icon(FontAwesome5.edit,color: Colors.red, size: h*0.03,)
+                              child: Icon(FontAwesome5.bars,color: Colors.red, size: h*0.03,)
                             ),
                           ],
                         ),

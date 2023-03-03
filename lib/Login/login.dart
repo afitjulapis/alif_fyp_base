@@ -236,16 +236,6 @@ class _LoginState extends State<Login> {
             ),
 
 
-            Container(
-              width: h*0.05,
-              height: h*0.05,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(h),
-                border: Border.all(color: Colors.blue,width:2)
-              ),
-              child: Center(child: Text('Log Masuk',style: TextStyle(fontSize:h*0.02,fontWeight: FontWeight.bold,color: Colors.white),textAlign: TextAlign.center,overflow: TextOverflow.ellipsis,maxLines: 6,))
-            ),
             
             
           ],
