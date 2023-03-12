@@ -14,6 +14,7 @@ class SenaraiPelajar extends ConsumerStatefulWidget {
 
 // 2. extend [ConsumerState]
 class _SenaraiPelajarState extends ConsumerState<SenaraiPelajar> {
+  var search='';
   @override
   Widget build(BuildContext context) {
     var w = MediaQuery.of(context).size.width;

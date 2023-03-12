@@ -26,41 +26,12 @@ class _LoginState extends State<Login> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container( // Kotak boleh custom
-                  // width: w*0.6,
-                  child: Text('e',style: TextStyle(fontSize:h*0.05,fontWeight: FontWeight.bold,color: Colors.blue),textAlign: TextAlign.center,overflow: TextOverflow.ellipsis,maxLines: 6,)
-                ),
-                Container(
-                  // width: w*0.6,
-                  child: Text('-',style: TextStyle(fontSize:h*0.05,fontWeight: FontWeight.bold,color: Colors.red),textAlign: TextAlign.center,overflow: TextOverflow.ellipsis,maxLines: 6,)
-                ),
-                Container(
-                  // width: w*0.6,
-                  child: Text('P',style: TextStyle(fontSize:h*0.05,fontWeight: FontWeight.bold,color: Colors.yellow),textAlign: TextAlign.center,overflow: TextOverflow.ellipsis,maxLines: 6,)
-                ),
-                Container(
-                  // width: w*0.6,
-                  child: Text('I',style: TextStyle(fontSize:h*0.05,fontWeight: FontWeight.bold,color: Colors.blue),textAlign: TextAlign.center,overflow: TextOverflow.ellipsis,maxLines: 6,)
-                ),
-                Container(
-                  // width: w*0.6,
-                  child: Text('B',style: TextStyle(fontSize:h*0.05,fontWeight: FontWeight.bold,color: Colors.green),textAlign: TextAlign.center,overflow: TextOverflow.ellipsis,maxLines: 6,)
-                ),
-                Container(
-                  // width: w*0.6,
-                  child: Text('G',style: TextStyle(fontSize:h*0.05,fontWeight: FontWeight.bold,color: Colors.red),textAlign: TextAlign.center,overflow: TextOverflow.ellipsis,maxLines: 6,)
+                  width: w*0.7,
+                  child: Text('IRIS \nManagement \nSystem',style: TextStyle(fontSize:h*0.05,fontWeight: FontWeight.bold,color: Colors.blue),textAlign: TextAlign.center,overflow: TextOverflow.ellipsis,maxLines: 6,)
                 ),
               ],
             ),
 
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  // width: w*0.6,
-                  child: Text('SMK Bandar Mas',style: TextStyle(fontSize:h*0.03,fontWeight: FontWeight.bold,color: Colors.green),textAlign: TextAlign.center,overflow: TextOverflow.ellipsis,maxLines: 6,)
-                ),
-              ],
-            ),
             SizedBox(height: h*0.04,),// kotak custom size ONLY
             
 
