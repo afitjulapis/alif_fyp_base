@@ -1,3 +1,4 @@
+import 'package:e_pibg/HEP/menu_HEP.dart';
 import 'package:e_pibg/pelajar/senaraiPelajar.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttericon/font_awesome5_icons.dart';
@@ -15,63 +16,29 @@ class _DashboardState extends State<Dashboard> {
     var w = MediaQuery.of(context).size.width;
     var h = MediaQuery.of(context).size.height;
     return Scaffold(
+      appBar: AppBar(
+        title:Container(
+          child: Text('DASHBOARD PENGGUNA',style: TextStyle(fontSize:h*0.02,fontWeight: FontWeight.bold,color: Colors.black),textAlign: TextAlign.center,overflow: TextOverflow.ellipsis,maxLines: 6,)
+        ), 
+        // leading: InkWell(
+        //   onTap: (){
+        //     Navigator.pop(context);
+        //   },
+        //   child: Icon(FontAwesome5.arrow_left)
+        // ),
+      ),
+      
       body: SafeArea(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Row(
-              children: [
-                Expanded(
-                  child: Container(
-                    padding:  EdgeInsets.only(top: h*0.0,bottom: h*0.0 ,left: w*0.02,right: w*0.02),
-                    decoration: BoxDecoration(
-                      color: Colors.transparent,
-                      borderRadius: BorderRadius.circular(10),
-                      // border: Border.all(color: ref.watch(truegray),width:2)
-                    ),
-                    child: Stack(
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.only(top: h*0.08,bottom: h*0.0 ,left: w*0.04,right: w*0.04),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Expanded(
-                                child: Container(
-                                  // width: w*0.3,
-                                  height: h*0.07,
-                                  padding:  EdgeInsets.only(top: h*0.0,bottom: h*0.0 ,left: w*0.04,right: w*0.04),
-                                  decoration: BoxDecoration(
-                                    color: Colors.yellow,
-                                    borderRadius: BorderRadius.circular(5),
-                                    border: Border.all(color: Colors.yellow,width:2)
-                                  ),
-                                  child: Center(
-                                    child: Container(
-                                      // width: w*0.6,
-                                      child: Text('DASHBOARD PENGGUNA',style: TextStyle(fontSize:h*0.02,fontWeight: FontWeight.bold,color: Colors.black),textAlign: TextAlign.center,overflow: TextOverflow.ellipsis,maxLines: 6,)
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-
-                        
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(height: h*0.04,),
+            
             Row(
               children: [
                 Expanded(
                   child: InkWell(
                     onTap: (){
-                      Navigator.push(context,MaterialPageRoute(builder: (context) => SenaraiPelajar())); // mcm hyperlink
+                      Navigator.push(context,MaterialPageRoute(builder: (context) => MenuHEP())); // mcm hyperlink
 
                     },
                     child: Container(

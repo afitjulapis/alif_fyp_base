@@ -28,6 +28,11 @@ environment:
 # versions available, run `flutter pub outdated`.
 dependencies:
   fluttericon: ^2.0.0
+  firebase_core: ^2.7.1
+  firebase_auth: ^4.2.10
+  cloud_firestore: ^4.4.4
+  flutter_riverpod: ^2.1.3
+  tuple: ^2.0.1
   flutter:
     sdk: flutter
 

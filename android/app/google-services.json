@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "841436078908",
+    "project_id": "fyp-alif-john",
+    "storage_bucket": "fyp-alif-john.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:841436078908:android:6a399b4fd6791d1825b439",
+        "android_client_info": {
+          "package_name": "com.example.e_pibg"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "841436078908-c5liopt06iam5qpj9plcf6ch7c1ermd1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC1wvMJyByBEBbgeKaWGm7y0m635QSOzaY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "841436078908-c5liopt06iam5qpj9plcf6ch7c1ermd1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
