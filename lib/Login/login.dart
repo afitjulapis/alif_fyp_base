@@ -1,14 +1,76 @@
+import 'package:e_pibg/Riverpod/user_data.dart';
+import 'package:e_pibg/dashboard/dashBoardAdmin.dart';
 import 'package:e_pibg/dashboard/dashboard.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class Login extends StatefulWidget {
-  // const Login({ Key? key }) : super(key: key);
-
+class Login extends ConsumerStatefulWidget {
   @override
-  State<Login> createState() => _LoginState();
+  ConsumerState<Login> createState() => _LoginState();
 }
 
-class _LoginState extends State<Login> {
+// 2. extend [ConsumerState]
+class _LoginState extends ConsumerState<Login> {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  String email='';
+  String password='';
+  bool _isLoading = false;
+
+  void _signInWithEmailAndPassword() async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      UserCredential userCredential =
+          await _auth.signInWithEmailAndPassword(
+        email: email.trim(),
+        password: password,
+      );
+      print('User logged in with uid: ${userCredential.user!.uid}');
+      ref.read(userUID.notifier).state=userCredential.user!.uid;
+      // Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => DashboardAdmin())); // mcm hyperlink
+      Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => DashboardUser())); // mcm hyperlink
+      // Navigate to HomeScreen on successful login
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text('User not found'),
+            content: Text(
+                'No user found for that email. Please check your email and try again.'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: Text('OK'),
+              ),
+            ],
+          ),
+        );
+      } else if (e.code == 'wrong-password') {
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text('Wrong password'),
+            content: Text(
+                'The password you entered is incorrect. Please try again.'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: Text('OK'),
+              ),
+            ],
+          ),
+        );
+      }
+    }
+
+    setState(() {
+      _isLoading = false;
+    });
+  }
 
 
   @override
@@ -89,7 +151,11 @@ class _LoginState extends State<Login> {
                           keyboardType: TextInputType.text, // 
                           maxLines: 1, // maxline untuk ruangan taip
                           onChanged: (String txt) { // live record apa perubahan
-                            
+                            if(txt.isEmpty){
+                              email='';
+                            }else{
+                              email=txt;
+                            }
                           },
                           style: TextStyle(
                             fontSize: h*0.02,
@@ -148,12 +214,16 @@ class _LoginState extends State<Login> {
                       width: w*0.5,
                       child: Center(
                         child: TextField(
-                          obscureText: false,
+                          obscureText: true,
                           textAlign: TextAlign.start,
                           keyboardType: TextInputType.text,
                           maxLines: 1,
                           onChanged: (String txt) {
-                            
+                            if(txt.isEmpty){
+                              password='';
+                            }else{
+                              password=txt;
+                            }
                           },
                           style: TextStyle(
                             fontSize: h*0.02,
@@ -189,8 +259,8 @@ class _LoginState extends State<Login> {
                 InkWell( // Convert into interaction
                   onTap: (){
                     // Navigator.push(context, route)
-                    Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => Dashboard())); // mcm hyperlink
-
+                    // Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => Dashboard())); // mcm hyperlink
+                    _signInWithEmailAndPassword();
                   },
                   child: Container(
                     width: w*0.6,

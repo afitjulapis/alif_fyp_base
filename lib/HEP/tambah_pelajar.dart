@@ -1,3 +1,4 @@
+import 'package:e_pibg/Riverpod/register_user.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttericon/font_awesome5_icons.dart';
@@ -16,6 +17,7 @@ class _TambahPelajarState extends ConsumerState<TambahPelajar> {
   // const TambahPelajar({super.key});
   var ic ='';
   var name ='';
+  var emel ='';
   var pakej ='';
   var phone ='';
   var subjek =[];
@@ -49,9 +51,13 @@ class _TambahPelajarState extends ConsumerState<TambahPelajar> {
           ],
         ),
         onPressed: (){
-          ref.read(addDataPelajar(Tuple7(ic, name, pakej, phone, subjek, tahap, ref)));
-          ref.invalidate(dataPelajar);
-          Navigator.pop(context);
+          createNewUser(emel, ic).then((value){
+            ref.read(currerntUID.notifier).state = value!;
+            ref.read(addDataPelajar(Tuple7(ic, name, pakej, phone, subjek, tahap, ref)));
+            ref.invalidate(dataPelajar);
+            Navigator.pop(context);
+          });
+          
         },
       ),
       appBar: AppBar(
@@ -278,6 +284,63 @@ class _TambahPelajarState extends ConsumerState<TambahPelajar> {
                             phone='';
                           }else{
                             phone=txt;
+                          }
+                        },
+                        style: TextStyle(
+                          fontSize: h*0.02,
+                          color: Colors.white
+                        ),
+                        decoration:  InputDecoration(
+                          border: InputBorder.none,
+                          hintText:  '',
+                          hintStyle: TextStyle(color:Colors.grey,fontSize: h*0.015),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.only(top: h*0.02,bottom: h*0.01,left: w*0.04,right: w*0.04),
+            child: Container(
+              // width: w*0.6,
+              child: Row(
+                children: [
+                  Text('Emel Penjaga : ',style: TextStyle(fontSize:h*0.02,fontWeight: FontWeight.bold,color: Colors.black),textAlign: TextAlign.start,overflow: TextOverflow.ellipsis,maxLines: 6,),
+                  
+                ],
+              )
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.only(top: h*0.0,bottom: h*0.0 ,left: w*0.04,right: w*0.04),
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.grey,
+                borderRadius: BorderRadius.circular(10),
+                // border: Border.all(color: ref.watch(truegray),width:2)
+              ),
+              height: h*0.06,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  SizedBox(width: w*0.04,),
+                  SizedBox(
+                    height: h*0.06,
+                    width: w*0.5,
+                    child: Center(
+                      child: TextField(
+                        obscureText: false,
+                        textAlign: TextAlign.start,
+                        keyboardType: TextInputType.text,
+                        maxLines: 1,
+                        onChanged: (String txt) {
+                          if(txt.isEmpty){
+                            emel='';
+                          }else{
+                            emel=txt;
                           }
                         },
                         style: TextStyle(

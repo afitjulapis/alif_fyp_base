@@ -1,16 +1,18 @@
 import 'package:e_pibg/HEP/menu_HEP.dart';
+import 'package:e_pibg/Riverpod/user_data.dart';
+import 'package:e_pibg/pelajar/detailPelajar.dart';
 import 'package:e_pibg/pelajar/senaraiPelajar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttericon/font_awesome5_icons.dart';
 
-class Dashboard extends StatefulWidget {
-  // const Dashboard({ Key? key }) : super(key: key);
-
+class DashboardUser extends ConsumerStatefulWidget {
   @override
-  State<Dashboard> createState() => _DashboardState();
+  ConsumerState<DashboardUser> createState() => _DashboardUserState();
 }
 
-class _DashboardState extends State<Dashboard> {
+// 2. extend [ConsumerState]
+class _DashboardUserState extends ConsumerState<DashboardUser> {
   @override
   Widget build(BuildContext context) {
     var w = MediaQuery.of(context).size.width;
@@ -38,7 +40,9 @@ class _DashboardState extends State<Dashboard> {
                 Expanded(
                   child: InkWell(
                     onTap: (){
-                      Navigator.push(context,MaterialPageRoute(builder: (context) => MenuHEP())); // mcm hyperlink
+                      getOnepelajar(ref).then((value){
+                        Navigator.push(context,MaterialPageRoute(builder: (context) => DetailPelajar(value))); // mcm hyperlink
+                      });
 
                     },
                     child: Container(
@@ -68,7 +72,7 @@ class _DashboardState extends State<Dashboard> {
                                     child: Center(
                                       child: Container(
                                         // width: w*0.6,
-                                        child: Text('HEP',style: TextStyle(fontSize:h*0.015,fontWeight: FontWeight.bold,color: Colors.white),textAlign: TextAlign.center,overflow: TextOverflow.ellipsis,maxLines: 6,)
+                                        child: Text('MAKLUMAT PELAJAR',style: TextStyle(fontSize:h*0.015,fontWeight: FontWeight.bold,color: Colors.white),textAlign: TextAlign.center,overflow: TextOverflow.ellipsis,maxLines: 6,)
                                       ),
                                     ),
                                   ),

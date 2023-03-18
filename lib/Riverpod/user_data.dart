@@ -8,6 +8,9 @@ import 'package:e_pibg/Model/model_pelajar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tuple/tuple.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
+
 
 final providerMain = Provider<DataPelajar>((ref) => DataPelajar());
 
@@ -22,7 +25,18 @@ final addDataPelajar = FutureProvider.autoDispose.family< dynamic,Tuple7<String,
   return watcher.addNewDataPelajar(data);
 });
 
+final registerPelajar = FutureProvider.autoDispose.family< dynamic,Tuple3<String,String,WidgetRef> >((ref,data) {
+  final watcher = ref.watch(providerMain);
+  return watcher.createNewUser(data);
+});
+
 final searchName = StateProvider<String>((ref) {
+  return '';
+});
+final currerntUID = StateProvider<String>((ref) {
+  return '';
+});
+final userUID = StateProvider<String>((ref) {
   return '';
 });
 
@@ -31,11 +45,61 @@ final payAvailable = StateProvider<bool>((ref) {
 });
 
 
+  final FirebaseFirestore firestore2 = FirebaseFirestore.instance;
 
 
-
+Future<dynamic> getOnepelajar(WidgetRef ref) async {
+    print('getting');
+    var getData = firestore2.collection('pelajar').doc(ref.read(userUID)).get();
+    
+    try{
+      DocumentSnapshot  snapshot = await getData;
+      if (snapshot.exists) {
+        // Document exists, do something with it
+        Object? data = snapshot.data();
+        return data;
+        print(data);
+      } else {
+        // Document does not exist
+        print('Document does not exist');
+        return 'error';
+      }
+      // var dataPelajarsDocID = querySnapshot.docs.map((doc) => doc.id).toList();
+      
+    }on FirebaseException catch (e){
+      return e.message;
+    }
+  }
 class DataPelajar {
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  Future<String?> createNewUser(tuple) async {
+    String email = tuple.item1;
+    String password= tuple.item2;
+    WidgetRef ref = tuple.item3;
+    try {
+      UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      String uid = userCredential.user!.uid;
+      print('New user created with uid: $uid');
+      return uid;
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'weak-password') {
+        print('The password provided is too weak.');
+        return e.message;
+      } else if (e.code == 'email-already-in-use') {
+        print('The account already exists for that email.');
+        return e.message;
+      }
+      
+    } catch (e) {
+      print(e);
+      return e.toString();
+    }
+  }
 
   Future<dynamic> getDataPelajarAll(WidgetRef ref) async {
     print('getting');
@@ -52,6 +116,8 @@ class DataPelajar {
     }
   }
 
+  
+
   Future<dynamic> addNewDataPelajar(tuple7) async{
     String ic =tuple7.item1;
     String name=tuple7.item2;
@@ -62,11 +128,12 @@ class DataPelajar {
     WidgetRef ref=tuple7.item7;
 
     try{
-      final addDataPelajar = firestore.collection('pelajar').doc(ic);
+      final addDataPelajar = firestore.collection('pelajar').doc(ref.read(currerntUID));
       final modelPelajar= Pelajar(ic:ic, name: name, pakej: pakej, phone: phone, subjek: subjek, tahap: tahap);
       final stdData = modelPelajar.toJson();
       await addDataPelajar.set(stdData);
       print('usccess add');
+      ref.invalidate(currerntUID);
       return 'success';
     }on FirebaseException catch (e){
       return e.message;
