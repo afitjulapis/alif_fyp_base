@@ -30,8 +30,8 @@ class _LoginState extends ConsumerState<Login> {
       );
       print('User logged in with uid: ${userCredential.user!.uid}');
       ref.read(userUID.notifier).state=userCredential.user!.uid;
-      // Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => DashboardAdmin())); // mcm hyperlink
-      Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => DashboardUser())); // mcm hyperlink
+      Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => DashboardAdmin())); // LOGIN ADMIN
+      // Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => DashboardUser())); // LOGIN USER
       // Navigate to HomeScreen on successful login
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
@@ -84,6 +84,11 @@ class _LoginState extends ConsumerState<Login> {
         child: Column( // Bina kebawah
           mainAxisAlignment: MainAxisAlignment.center, // control kedudukan - center, end dsbgainya
           children: [
+            Image.asset(
+              'assets/logo.jpg',
+              width: h*0.2,
+              fit: BoxFit.fitHeight,
+            ),
             Row( // Bina Horizontal
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
