@@ -30,6 +30,16 @@ final registerPelajar = FutureProvider.autoDispose.family< dynamic,Tuple3<String
   return watcher.createNewUser(data);
 });
 
+final getTahap = FutureProvider.autoDispose.family<dynamic,WidgetRef>((ref,data) {
+  final watcher = ref.watch(providerMain);
+  return watcher.getTahapPelajar(data);
+});
+
+final getThpdetails = FutureProvider.autoDispose.family<dynamic,String>((ref,data) {
+  final watcher = ref.watch(providerMain);
+  return watcher.getTahapDetails(data);
+});
+
 final searchName = StateProvider<String>((ref) {
   return '';
 });
@@ -45,31 +55,41 @@ final payAvailable = StateProvider<bool>((ref) {
 });
 
 
-  final FirebaseFirestore firestore2 = FirebaseFirestore.instance;
+final dataPelajarGlobal = StateProvider<List>((ref) {
+  return [];
+});
+
+final dataPelajarSearch = StateProvider<List>((ref) {
+  return [];
+});
+
+
+final FirebaseFirestore firestore2 = FirebaseFirestore.instance;
 
 
 Future<dynamic> getOnepelajar(WidgetRef ref) async {
-    print('getting');
-    var getData = firestore2.collection('pelajar').doc(ref.read(userUID)).get();
-    
-    try{
-      DocumentSnapshot  snapshot = await getData;
-      if (snapshot.exists) {
-        // Document exists, do something with it
-        Object? data = snapshot.data();
-        return data;
-        print(data);
-      } else {
-        // Document does not exist
-        print('Document does not exist');
-        return 'error';
-      }
-      // var dataPelajarsDocID = querySnapshot.docs.map((doc) => doc.id).toList();
-      
-    }on FirebaseException catch (e){
-      return e.message;
+  print('getting');
+  var getData = firestore2.collection('pelajar').doc(ref.read(userUID)).get();
+  
+  try{
+    DocumentSnapshot  snapshot = await getData;
+    if (snapshot.exists) {
+      // Document exists, do something with it
+      Object? data = snapshot.data();
+      return data;
+      print(data);
+    } else {
+      // Document does not exist
+      print('Document does not exist');
+      return 'error';
     }
+    // var dataPelajarsDocID = querySnapshot.docs.map((doc) => doc.id).toList();
+    
+  }on FirebaseException catch (e){
+    return e.message;
   }
+}
+
 class DataPelajar {
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -109,7 +129,49 @@ class DataPelajar {
       QuerySnapshot querySnapshot = await getData.get();
       var dataPelajars = querySnapshot.docs.map((doc) => doc.data()).toList();
       // var dataPelajarsDocID = querySnapshot.docs.map((doc) => doc.id).toList();
+      ref.invalidate(dataPelajarGlobal);
+      ref.read(dataPelajarGlobal.notifier).state = dataPelajars;
+      print(ref.read(dataPelajarGlobal));
       return dataPelajars;
+      
+    }on FirebaseException catch (e){
+      return e.message;
+    }
+  }
+
+  Future<dynamic> getTahapPelajar(WidgetRef ref) async {
+    print('getting');
+    var getData = firestore.collection('subjek');
+    
+    try{
+      QuerySnapshot querySnapshot = await getData.get();
+      var dataPelajars = querySnapshot.docs.map((doc) => doc.id).toList();
+      // var dataPelajarsDocID = querySnapshot.docs.map((doc) => doc.id).toList();
+      return dataPelajars;
+      
+    }on FirebaseException catch (e){
+      return e.message;
+    }
+  }
+
+  Future<dynamic> getTahapDetails(tahap) async {
+    print('getting');
+    var getData = firestore2.collection('subjek').doc(tahap).get();
+    
+    try{
+      DocumentSnapshot  snapshot = await getData;
+      if (snapshot.exists) {
+        // Document exists, do something with it
+        Object? data = snapshot.data();
+        print(data.toString());
+        return data;
+        print(data);
+      } else {
+        // Document does not exist
+        print('Document does not exist');
+        return 'error';
+      }
+      // var dataPelajarsDocID = querySnapshot.docs.map((doc) => doc.id).toList();
       
     }on FirebaseException catch (e){
       return e.message;

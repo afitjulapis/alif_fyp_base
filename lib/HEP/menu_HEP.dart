@@ -1,15 +1,17 @@
 import 'package:e_pibg/HEP/tambah_pelajar.dart';
+import 'package:e_pibg/Riverpod/user_data.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttericon/font_awesome5_icons.dart';
 
 import '../pelajar/senaraiPelajar.dart';
 
-class MenuHEP extends StatelessWidget {
+class MenuHEP extends ConsumerWidget {
   const MenuHEP({super.key});
   // Navigator.push(context,MaterialPageRoute(builder: (context) => SenaraiPelajar())); // mcm hyperlink
   
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context,WidgetRef ref) {
     var w = MediaQuery.of(context).size.width;
     var h = MediaQuery.of(context).size.height;
     return Scaffold(
@@ -68,6 +70,7 @@ class MenuHEP extends StatelessWidget {
                 Expanded( //  auto kembang saiz nya\
                   child: InkWell(
                     onTap: (){
+                      ref.invalidate(searchName);
                       Navigator.push(context,MaterialPageRoute(builder: (context) => SenaraiPelajar())); // mcm hyperlink
 
                     },

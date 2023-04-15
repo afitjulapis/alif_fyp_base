@@ -83,6 +83,15 @@ class _SenaraiPelajarState extends ConsumerState<SenaraiPelajar> {
                                                   ref.read(searchName.notifier).state='';
                                                 }else{
                                                   ref.read(searchName.notifier).state=txt;
+                                                  ref.invalidate(dataPelajarSearch);
+                                                  for (var i = 0; i < ref.read(dataPelajarGlobal).length; i++) {
+                                                    var data =ref.read(dataPelajarGlobal)[i];
+                                                    
+                                                    if(data['name'].toString().toLowerCase().contains(txt.toString().toLowerCase())){
+                                                      ref.read(dataPelajarSearch.notifier).state.add(data);
+                                                    }
+                                                  }
+
                                                 }
                                               });
                                             },
@@ -115,80 +124,88 @@ class _SenaraiPelajarState extends ConsumerState<SenaraiPelajar> {
               child: Consumer(builder: (context, ref, child) {
                 return ref.watch(dataPelajar(ref)).when(
                     data: (data){
-                      print(data);
-                      return ListView.builder(
-                        padding: const EdgeInsets.all(8),
-                        itemCount: data.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          if(ref.watch(searchName).isEmpty){
-                            return Padding(
-                              padding: EdgeInsets.only(top: h*0.01,bottom: h*0.01 ,left: w*0.0,right: w*0.0),
-                              child: InkWell(
-                                onTap: (){
-                                  Navigator.push(context,MaterialPageRoute(builder: (context) => DetailPelajar(data[index]))); // mcm hyperlink
-                                },
-                                child: Container(
-                                  color: Colors.green,
-                                  child: Padding(
-                                    padding: EdgeInsets.only(top: h*0.01,bottom: h*0.01 ,left: w*0.04,right: w*0.04),
-                                    child: Row(
-                                      children: [
-                                        
-                                        Container(
-                                          width: h*0.05,
-                                          height: h*0.05,
-                                          decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            borderRadius: BorderRadius.circular(h),
-                                            border: Border.all(color: Colors.blue,width:2)
+                      if(ref.watch(searchName).isEmpty){
+                        print(ref.read(dataPelajarGlobal).length);
+                        print('YO!');
+                        return ListView.builder(
+                          padding: const EdgeInsets.all(8),
+                          itemCount: ref.watch(dataPelajarGlobal).length,
+                          itemBuilder: (BuildContext context, int index) {
+                              return Padding(
+                                padding: EdgeInsets.only(top: h*0.01,bottom: h*0.01 ,left: w*0.0,right: w*0.0),
+                                child: InkWell(
+                                  onTap: (){
+                                    Navigator.push(context,MaterialPageRoute(builder: (context) => DetailPelajar(ref.read(dataPelajarGlobal)[index]))); // mcm hyperlink
+                                  },
+                                  child: Container(
+                                    color: Colors.green,
+                                    child: Padding(
+                                      padding: EdgeInsets.only(top: h*0.01,bottom: h*0.01 ,left: w*0.04,right: w*0.04),
+                                      child: Row(
+                                        children: [
+                                          
+                                          Container(
+                                            width: h*0.05,
+                                            height: h*0.05,
+                                            decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              borderRadius: BorderRadius.circular(h),
+                                              border: Border.all(color: Colors.blue,width:2)
+                                            ),
+                                            child: Center(child: Text('Log Masuk',style: TextStyle(fontSize:h*0.02,fontWeight: FontWeight.bold,color: Colors.white),textAlign: TextAlign.center,overflow: TextOverflow.ellipsis,maxLines: 6,))
                                           ),
-                                          child: Center(child: Text('Log Masuk',style: TextStyle(fontSize:h*0.02,fontWeight: FontWeight.bold,color: Colors.white),textAlign: TextAlign.center,overflow: TextOverflow.ellipsis,maxLines: 6,))
-                                        ),
-                                        SizedBox(width: w*0.02,),
-                                        Text(data[index]['name']),
-                                      ],
+                                          SizedBox(width: w*0.02,),
+                                          Text(ref.read(dataPelajarGlobal)[index]['name']),
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 ),
-                              ),
-                            );
-                          }else if(data[index]['name'].toString().toLowerCase().contains(ref.watch(searchName).toLowerCase())){
-                            return Padding(
-                              padding: EdgeInsets.only(top: h*0.01,bottom: h*0.01 ,left: w*0.0,right: w*0.0),
-                              child: InkWell(
-                                onTap: (){
-                                  Navigator.push(context,MaterialPageRoute(builder: (context) => DetailPelajar(data[index]))); // mcm hyperlink
-                                },
-                                child: Container(
-                                  color: Colors.green,
-                                  child: Padding(
-                                    padding: EdgeInsets.only(top: h*0.01,bottom: h*0.01 ,left: w*0.04,right: w*0.04),
-                                    child: Row(
-                                      children: [
-                                        
-                                        Container(
-                                          width: h*0.05,
-                                          height: h*0.05,
-                                          decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            borderRadius: BorderRadius.circular(h),
-                                            border: Border.all(color: Colors.blue,width:2)
-                                          ),
-                                          child: Center(child: Text('Log Masuk',style: TextStyle(fontSize:h*0.02,fontWeight: FontWeight.bold,color: Colors.white),textAlign: TextAlign.center,overflow: TextOverflow.ellipsis,maxLines: 6,))
-                                        ),
-                                        SizedBox(width: w*0.02,),
-                                        Text(data[index]['name']),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            );
-                          }else{
-                            SizedBox();
+                              );
                           }
-                        }
-                      );
+                        );
+                      }else{
+                        print('YO2!');
+                        print(ref.read(searchName));
+                        return ListView.builder(
+                          padding: const EdgeInsets.all(8),
+                          itemCount: ref.read(dataPelajarSearch).length,
+                          itemBuilder: (BuildContext context, int index) {
+                              return Padding(
+                                padding: EdgeInsets.only(top: h*0.01,bottom: h*0.01 ,left: w*0.0,right: w*0.0),
+                                child: InkWell(
+                                  onTap: (){
+                                    Navigator.push(context,MaterialPageRoute(builder: (context) => DetailPelajar(ref.read(dataPelajarSearch)[index]))); // mcm hyperlink
+                                  },
+                                  child: Container(
+                                    color: Colors.green,
+                                    child: Padding(
+                                      padding: EdgeInsets.only(top: h*0.01,bottom: h*0.01 ,left: w*0.04,right: w*0.04),
+                                      child: Row(
+                                        children: [
+                                          
+                                          Container(
+                                            width: h*0.05,
+                                            height: h*0.05,
+                                            decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              borderRadius: BorderRadius.circular(h),
+                                              border: Border.all(color: Colors.blue,width:2)
+                                            ),
+                                            child: Center(child: Text('Log Masuk',style: TextStyle(fontSize:h*0.02,fontWeight: FontWeight.bold,color: Colors.white),textAlign: TextAlign.center,overflow: TextOverflow.ellipsis,maxLines: 6,))
+                                          ),
+                                          SizedBox(width: w*0.02,),
+                                          Text(ref.read(dataPelajarSearch)[index]['name']),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              );
+                          }
+                        );
+                      }
+                      
                     }, 
                     error: (e,st){
                       return Text(e.toString());
