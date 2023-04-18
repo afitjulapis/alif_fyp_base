@@ -30,8 +30,8 @@ class _LoginState extends ConsumerState<Login> {
       );
       print('User logged in with uid: ${userCredential.user!.uid}');
       ref.read(userUID.notifier).state=userCredential.user!.uid;
-      Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => DashboardAdmin())); // LOGIN ADMIN
-      // Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => DashboardUser())); // LOGIN USER
+      // Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => DashboardAdmin())); // LOGIN ADMIN
+      Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => DashboardUser())); // LOGIN USER
       // Navigate to HomeScreen on successful login
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {

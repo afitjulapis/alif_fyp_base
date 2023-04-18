@@ -165,8 +165,6 @@ class _SenaraiPelajarState extends ConsumerState<SenaraiPelajar> {
                           }
                         );
                       }else{
-                        print('YO2!');
-                        print(ref.read(searchName));
                         return ListView.builder(
                           padding: const EdgeInsets.all(8),
                           itemCount: ref.read(dataPelajarSearch).length,
