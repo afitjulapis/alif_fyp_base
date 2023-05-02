@@ -1,3 +1,4 @@
+import 'package:e_pibg/pembayaran/user/rekod_bayaran.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -37,6 +38,8 @@ class BayarMenuUser extends ConsumerWidget {
             ElevatedButton(
               onPressed: () {
                 // Do something
+                  Navigator.push(context,MaterialPageRoute(builder: (context) => RekodBayaran())); // mcm hyperlink
+
               },
               child: Text('Rekod Bayaran'),
             ),

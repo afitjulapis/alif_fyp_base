@@ -72,6 +72,116 @@ class _LoginState extends ConsumerState<Login> {
     });
   }
 
+  void debuglogin() async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      UserCredential userCredential =
+          await _auth.signInWithEmailAndPassword(
+        email: 'satria@gmail.com',
+        password: '061116010489',
+      );
+      print('User logged in with uid: ${userCredential.user!.uid}');
+      ref.read(userUID.notifier).state=userCredential.user!.uid;
+      Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => DashboardAdmin())); // LOGIN ADMIN
+      // Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => DashboardUser())); // LOGIN USER
+      // Navigate to HomeScreen on successful login
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text('User not found'),
+            content: Text(
+                'No user found for that email. Please check your email and try again.'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: Text('OK'),
+              ),
+            ],
+          ),
+        );
+      } else if (e.code == 'wrong-password') {
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text('Wrong password'),
+            content: Text(
+                'The password you entered is incorrect. Please try again.'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: Text('OK'),
+              ),
+            ],
+          ),
+        );
+      }
+    }
+
+    setState(() {
+      _isLoading = false;
+    });
+  }
+
+  void debugadmin() async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      UserCredential userCredential =
+          await _auth.signInWithEmailAndPassword(
+        email: 'admin@gmail.com',
+        password: '123456',
+      );
+      print('User logged in with uid: ${userCredential.user!.uid}');
+      ref.read(userUID.notifier).state=userCredential.user!.uid;
+      Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => DashboardAdmin())); // LOGIN ADMIN
+      // Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => DashboardUser())); // LOGIN USER
+      // Navigate to HomeScreen on successful login
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text('User not found'),
+            content: Text(
+                'No user found for that email. Please check your email and try again.'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: Text('OK'),
+              ),
+            ],
+          ),
+        );
+      } else if (e.code == 'wrong-password') {
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text('Wrong password'),
+            content: Text(
+                'The password you entered is incorrect. Please try again.'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: Text('OK'),
+              ),
+            ],
+          ),
+        );
+      }
+    }
+
+    setState(() {
+      _isLoading = false;
+    });
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -257,7 +367,7 @@ class _LoginState extends ConsumerState<Login> {
                 ),
               ],
             ),
-            SizedBox(height: h*0.1,),
+            Expanded(child: SizedBox()),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -280,6 +390,51 @@ class _LoginState extends ConsumerState<Login> {
                 ),
               ],
             ),
+            // Row(
+            //   mainAxisAlignment: MainAxisAlignment.center,
+            //   children: [
+            //     InkWell( // Convert into interaction
+            //       onTap: (){
+            //         // Navigator.push(context, route)
+            //         // Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => Dashboard())); // mcm hyperlink
+            //         debuglogin();
+            //       },
+            //       child: Container(
+            //         width: w*0.6,
+            //         height: h*0.05,
+            //         decoration: BoxDecoration(
+            //           color: Colors.blue,
+            //           borderRadius: BorderRadius.circular(10),
+            //           // border: Border.all(color: ref.watch(truegray),width:2)
+            //         ),
+            //         child: Center(child: Text('DEBUG LOGIN',style: TextStyle(fontSize:h*0.02,fontWeight: FontWeight.bold,color: Colors.white),textAlign: TextAlign.center,overflow: TextOverflow.ellipsis,maxLines: 6,))
+            //       ),
+            //     ),
+            //   ],
+            // ),
+
+            // Row(
+            //   mainAxisAlignment: MainAxisAlignment.center,
+            //   children: [
+            //     InkWell( // Convert into interaction
+            //       onTap: (){
+            //         // Navigator.push(context, route)
+            //         // Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => Dashboard())); // mcm hyperlink
+            //         debugadmin();
+            //       },
+            //       child: Container(
+            //         width: w*0.6,
+            //         height: h*0.05,
+            //         decoration: BoxDecoration(
+            //           color: Colors.blue,
+            //           borderRadius: BorderRadius.circular(10),
+            //           // border: Border.all(color: ref.watch(truegray),width:2)
+            //         ),
+            //         child: Center(child: Text('DEBUG ADMIN',style: TextStyle(fontSize:h*0.02,fontWeight: FontWeight.bold,color: Colors.white),textAlign: TextAlign.center,overflow: TextOverflow.ellipsis,maxLines: 6,))
+            //       ),
+            //     ),
+            //   ],
+            // ),
 
 
             
