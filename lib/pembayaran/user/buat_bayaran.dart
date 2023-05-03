@@ -4,21 +4,22 @@ import 'dart:math';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_full_pdf_viewer_null_safe/full_pdf_viewer_scaffold.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:path/path.dart';
+import 'package:tuple/tuple.dart';
 
 import '../../Riverpod/user_data.dart';
 
-class PackageScreen extends StatefulWidget {
+class PackageScreen extends ConsumerStatefulWidget {
   final dataPelajar;
   PackageScreen(this.dataPelajar);
   @override
-  _PackageScreenState createState() => _PackageScreenState();
+  ConsumerState<PackageScreen> createState() => _PackageScreenState();
 }
 
-class _PackageScreenState extends State<PackageScreen> {
+// 2. extend [ConsumerState]
+class _PackageScreenState extends ConsumerState<PackageScreen> {
   int quantty = 0;
   List<String> _months = [
     'January',
@@ -306,8 +307,45 @@ class _PackageScreenState extends State<PackageScreen> {
                 }
                 try{
                   await task.whenComplete(() async {
-                    String downloadURL = await reference.getDownloadURL();
-                    print(downloadURL);
+                    var listMonth =[];
+                    for (var i = 0; i < _isSelected.length; i++) {
+                      if(_isSelected[i]){
+                        listMonth.add(_months[i]);
+                      }
+                    }
+                    var title='';
+                    if(listMonth.length>1){
+                      title = 'Bayaran ';
+                      listMonth.forEach((element) {
+                        title+= element+',';
+                      });
+                      title = title.substring(0, title.length - 1);
+                      title+= ' '+ _yearController.text;
+                    }else{
+                      title = 'Bayaran '+listMonth.first +' '+  _yearController.text;
+                    }
+                    ref.read(addNewPay(Tuple2([quantty,listMonth,randomString,totalHarga,totalHarga*quantty,widget.dataPelajar['pakej'],widget.dataPelajar['tahap'],_yearController.text,title,extensionName], ref)));
+                    ref.read(addPendingPay(Tuple2([quantty,listMonth,randomString,totalHarga,totalHarga*quantty,widget.dataPelajar['pakej'],widget.dataPelajar['tahap'],_yearController.text,title,extensionName,ref.read(userUID),widget.dataPelajar['name']], ref)));
+                    showDialog(
+                      context: context,
+                      barrierDismissible: false,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: Text("Bayaran Direkodkan"),
+                          content: Text('Sila tunggu pengesahan dari pihak pentadbiran'),
+                          actions: <Widget>[
+                            TextButton(
+                              child: Text('Tutup'),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                          ],
+                        );
+                      },
+                    );
+
                   });
                 }catch(e){
                   showDialog(
@@ -339,7 +377,7 @@ class _PackageScreenState extends State<PackageScreen> {
                 //   print('Download URL: $downloadURL');
                 // });
               },
-              label: Text('Bayar RM '+(totalHarga*quantty).toString()),
+              label: Text('Rekodkan bayaran RM '+(totalHarga*quantty).toString()),
               icon: Icon(Icons.check),
             )
           : null,

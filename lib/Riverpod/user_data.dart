@@ -40,6 +40,26 @@ final getThpdetails = FutureProvider.autoDispose.family<dynamic,String>((ref,dat
   return watcher.getTahapDetails(data);
 });
 
+final addNewPay = FutureProvider.autoDispose.family<dynamic,Tuple2<List,WidgetRef>>((ref,data) {
+  final watcher = ref.watch(providerMain);
+  return watcher.addPayRec(data);
+});
+
+final addPendingPay = FutureProvider.autoDispose.family<dynamic,Tuple2<List,WidgetRef>>((ref,data) {
+  final watcher = ref.watch(providerMain);
+  return watcher.addPendingRec(data);
+});
+
+final getPayrec_ID = FutureProvider.autoDispose.family<dynamic,WidgetRef>((ref,data) {
+  final watcher = ref.watch(providerMain);
+  return watcher.getRecPayID(data);
+});
+
+final getPendPay = FutureProvider.autoDispose.family<dynamic,WidgetRef>((ref,data) {
+  final watcher = ref.watch(providerMain);
+  return watcher.getPendingPay(data);
+});
+
 final searchName = StateProvider<String>((ref) {
   return '';
 });
@@ -60,6 +80,10 @@ final dataPelajarGlobal = StateProvider<List>((ref) {
 });
 
 final dataPelajarSearch = StateProvider<List>((ref) {
+  return [];
+});
+
+final currentPendID = StateProvider<List>((ref) {
   return [];
 });
 
@@ -88,6 +112,54 @@ Future<dynamic> getOnepelajar(WidgetRef ref) async {
   }on FirebaseException catch (e){
     return e.message;
   }
+}
+
+Future<dynamic> getRecIDList(uid) async {
+  print('getting');
+  var getData = firestore2.collection('rekodBayaran').doc(uid).collection('payment');
+  
+  try{
+    QuerySnapshot querySnapshot = await getData.get();
+    // var dataPayID = querySnapshot.docs.map((doc) => doc.data()).toList();
+    var dataIDLIST = querySnapshot.docs.map((doc) => doc.id).toList();
+    print('dataIDLIST');
+    print(dataIDLIST);
+    // var dataPayIDDocID = querySnapshot.docs.map((doc) => doc.id).toList();
+    return dataIDLIST;
+    
+  }on FirebaseException catch (e){
+    return e.message;
+  }
+}
+
+Future<dynamic> getRecPayLone(uid) async {
+  print('getting');
+  var getData = firestore2.collection('rekodBayaran').doc(uid).collection('payment');
+  
+  try{
+    QuerySnapshot querySnapshot = await getData.get();
+    var dataPayID = querySnapshot.docs.map((doc) => doc.data()).toList();
+    print('dataPayID');
+    print(dataPayID);
+    // var dataPayIDDocID = querySnapshot.docs.map((doc) => doc.id).toList();
+    return dataPayID;
+    
+  }on FirebaseException catch (e){
+    return e.message;
+  }
+}
+
+Future<void> updateDataPay(uid,docID,status) async {
+  final firestore = FirebaseFirestore.instance;
+  final collection = firestore.collection('rekodBayaran').doc(uid).collection('payment').doc(docID);
+  // Replace `fieldToUpdate` with the name of the field you want to update
+  await collection.update({'status': status});
+}
+
+Future<void> deleteData(docID) async {
+  final firestore = FirebaseFirestore.instance;
+  final collection = firestore.collection('pendingPay').doc(docID);
+  await collection.delete();
 }
 
 class DataPelajar {
@@ -154,6 +226,8 @@ class DataPelajar {
     }
   }
 
+
+
   Future<dynamic> getTahapDetails(tahap) async {
     print('getting');
     var getData = firestore2.collection('subjek').doc(tahap).get();
@@ -194,7 +268,7 @@ class DataPelajar {
       final modelPelajar= Pelajar(ic:ic, name: name, pakej: pakej, phone: phone, subjek: subjek, tahap: tahap);
       final stdData = modelPelajar.toJson();
       await addDataPelajar.set(stdData);
-      print('usccess add');
+      print('usccess add ');
       ref.invalidate(currerntUID);
       return 'success';
     }on FirebaseException catch (e){
@@ -202,7 +276,105 @@ class DataPelajar {
     }
   }
 
+  Future<dynamic> addPendingRec(tuple2) async{
+    var listData = tuple2.item1;
+    WidgetRef ref = tuple2.item2;
+    print(listData);
+    var bilBayar = listData[0];
+    var bulanDibayar = listData[1];
+    var fileID = listData[2];
+    var hargaSeunit = listData[3];
+    var hargaTotal = listData[4];
+    var pakej = listData[5];
+    var tahap = listData[6];
+    var tahunDibayar = listData[7];
+    var title = listData[8];
+    var fileType = listData[9];
+    var userID = listData[10];
+    var userName = listData[11];
+
+
+
+    try{
+      final addPayrecc = firestore.collection('pendingPay').doc();
+      final modelRec= PendingRec(bilBayar: bilBayar, bulanDibayar: bulanDibayar, fileID: fileID, hargaSeunit: hargaSeunit, hargaTotal: hargaTotal, pakej: pakej, tahap: tahap, tahunDibayar: tahunDibayar, title: title, fileType: fileType, userID: userID, userName: userName);
+      final payrecData = modelRec.toJson();
+      await addPayrecc.set(payrecData);
+      print('usccess add pending');
+      return 'success';
+    }on FirebaseException catch (e){
+      return e.message;
+    }
+  }
+
+  Future<dynamic> addPayRec(tuple2) async{
+    var listData = tuple2.item1;
+    WidgetRef ref = tuple2.item2;
+
+    var bilBayar = listData[0];
+    var bulanDibayar = listData[1];
+    var fileID = listData[2];
+    var hargaSeunit = listData[3];
+    var hargaTotal = listData[4];
+    var pakej = listData[5];
+    var tahap = listData[6];
+    var tahunDibayar = listData[7];
+    var title = listData[8];
+    var fileType = listData[9];
+
+
+
+
+    try{
+      final addPayrecc = firestore.collection('rekodBayaran').doc(ref.read(userUID)).collection('payment').doc();
+      final modelRec= PayRec(bilBayar: bilBayar, bulanDibayar: bulanDibayar, fileID: fileID, hargaSeunit: hargaSeunit, hargaTotal: hargaTotal, pakej: pakej, tahap: tahap, tahunDibayar: tahunDibayar, title: title,fileType:fileType,status:'PENDING');
+      final payrecData = modelRec.toJson();
+      await addPayrecc.set(payrecData);
+      print('success add pay');
+      return 'success';
+    }on FirebaseException catch (e){
+      return e.message;
+    }
+  }
+
+  Future<dynamic> getRecPayID(WidgetRef ref) async {
+    print('getting');
+    var getData = firestore.collection('rekodBayaran').doc(ref.read(userUID)).collection('payment');
+    
+    try{
+      QuerySnapshot querySnapshot = await getData.get();
+      var dataPayID = querySnapshot.docs.map((doc) => doc.data()).toList();
+      print('dataPayID');
+      print(dataPayID);
+      // var dataPayIDDocID = querySnapshot.docs.map((doc) => doc.id).toList();
+      return dataPayID;
+      
+    }on FirebaseException catch (e){
+      return e.message;
+    }
+  }
+
+  Future<dynamic> getPendingPay(WidgetRef ref) async {
+    print('getting');
+    var getData = firestore.collection('pendingPay');
+    
+    try{
+      QuerySnapshot querySnapshot = await getData.get();
+      var dataPayID = querySnapshot.docs.map((doc) => doc.data()).toList();
+      print('dataPayID');
+      print(dataPayID);
+      var dataPayIDDocID = querySnapshot.docs.map((doc) => doc.id).toList();
+      ref.read(currentPendID.notifier).state=dataPayIDDocID;
+      return dataPayID;
+      
+    }on FirebaseException catch (e){
+      return e.message;
+    }
+  }
+
 }
+
+
 
 
 // class TraildataActions with ChangeNotifier {
