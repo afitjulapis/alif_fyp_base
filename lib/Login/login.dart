@@ -390,28 +390,28 @@ class _LoginState extends ConsumerState<Login> {
                 ),
               ],
             ),
-            // Row(
-            //   mainAxisAlignment: MainAxisAlignment.center,
-            //   children: [
-            //     InkWell( // Convert into interaction
-            //       onTap: (){
-            //         // Navigator.push(context, route)
-            //         // Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => Dashboard())); // mcm hyperlink
-            //         debuglogin();
-            //       },
-            //       child: Container(
-            //         width: w*0.6,
-            //         height: h*0.05,
-            //         decoration: BoxDecoration(
-            //           color: Colors.blue,
-            //           borderRadius: BorderRadius.circular(10),
-            //           // border: Border.all(color: ref.watch(truegray),width:2)
-            //         ),
-            //         child: Center(child: Text('DEBUG LOGIN',style: TextStyle(fontSize:h*0.02,fontWeight: FontWeight.bold,color: Colors.white),textAlign: TextAlign.center,overflow: TextOverflow.ellipsis,maxLines: 6,))
-            //       ),
-            //     ),
-            //   ],
-            // ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                InkWell( // Convert into interaction
+                  onTap: (){
+                    // Navigator.push(context, route)
+                    // Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => Dashboard())); // mcm hyperlink
+                    debuglogin();
+                  },
+                  child: Container(
+                    width: w*0.6,
+                    height: h*0.05,
+                    decoration: BoxDecoration(
+                      color: Colors.blue,
+                      borderRadius: BorderRadius.circular(10),
+                      // border: Border.all(color: ref.watch(truegray),width:2)
+                    ),
+                    child: Center(child: Text('DEBUG LOGIN',style: TextStyle(fontSize:h*0.02,fontWeight: FontWeight.bold,color: Colors.white),textAlign: TextAlign.center,overflow: TextOverflow.ellipsis,maxLines: 6,))
+                  ),
+                ),
+              ],
+            ),
 
             // Row(
             //   mainAxisAlignment: MainAxisAlignment.center,

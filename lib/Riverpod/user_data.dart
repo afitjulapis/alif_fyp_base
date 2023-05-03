@@ -83,6 +83,10 @@ final dataPelajarSearch = StateProvider<List>((ref) {
   return [];
 });
 
+final currentPendID = StateProvider<List>((ref) {
+  return [];
+});
+
 
 final FirebaseFirestore firestore2 = FirebaseFirestore.instance;
 
@@ -108,6 +112,54 @@ Future<dynamic> getOnepelajar(WidgetRef ref) async {
   }on FirebaseException catch (e){
     return e.message;
   }
+}
+
+Future<dynamic> getRecIDList(uid) async {
+  print('getting');
+  var getData = firestore2.collection('rekodBayaran').doc(uid).collection('payment');
+  
+  try{
+    QuerySnapshot querySnapshot = await getData.get();
+    // var dataPayID = querySnapshot.docs.map((doc) => doc.data()).toList();
+    var dataIDLIST = querySnapshot.docs.map((doc) => doc.id).toList();
+    print('dataIDLIST');
+    print(dataIDLIST);
+    // var dataPayIDDocID = querySnapshot.docs.map((doc) => doc.id).toList();
+    return dataIDLIST;
+    
+  }on FirebaseException catch (e){
+    return e.message;
+  }
+}
+
+Future<dynamic> getRecPayLone(uid) async {
+  print('getting');
+  var getData = firestore2.collection('rekodBayaran').doc(uid).collection('payment');
+  
+  try{
+    QuerySnapshot querySnapshot = await getData.get();
+    var dataPayID = querySnapshot.docs.map((doc) => doc.data()).toList();
+    print('dataPayID');
+    print(dataPayID);
+    // var dataPayIDDocID = querySnapshot.docs.map((doc) => doc.id).toList();
+    return dataPayID;
+    
+  }on FirebaseException catch (e){
+    return e.message;
+  }
+}
+
+Future<void> updateDataPay(uid,docID,status) async {
+  final firestore = FirebaseFirestore.instance;
+  final collection = firestore.collection('rekodBayaran').doc(uid).collection('payment').doc(docID);
+  // Replace `fieldToUpdate` with the name of the field you want to update
+  await collection.update({'status': status});
+}
+
+Future<void> deleteData(docID) async {
+  final firestore = FirebaseFirestore.instance;
+  final collection = firestore.collection('pendingPay').doc(docID);
+  await collection.delete();
 }
 
 class DataPelajar {
@@ -311,7 +363,8 @@ class DataPelajar {
       var dataPayID = querySnapshot.docs.map((doc) => doc.data()).toList();
       print('dataPayID');
       print(dataPayID);
-      // var dataPayIDDocID = querySnapshot.docs.map((doc) => doc.id).toList();
+      var dataPayIDDocID = querySnapshot.docs.map((doc) => doc.id).toList();
+      ref.read(currentPendID.notifier).state=dataPayIDDocID;
       return dataPayID;
       
     }on FirebaseException catch (e){
