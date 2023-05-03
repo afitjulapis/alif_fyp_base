@@ -104,8 +104,11 @@ class _PackageScreenState extends ConsumerState<PackageScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var w = MediaQuery.of(context).size.width;
+    var h = MediaQuery.of(context).size.height;
     print(widget.dataPelajar);
     return Scaffold(
+      backgroundColor: Colors.grey[800],
       appBar: AppBar(
         title: Text('Package Details'),
       ),
@@ -172,10 +175,12 @@ class _PackageScreenState extends ConsumerState<PackageScreen> {
               style: TextStyle(
                 fontSize: 16.0,
                 fontWeight: FontWeight.bold,
+                color: Colors.white
               ),
             ),
             SizedBox(height: 8.0),
             TextField(
+              
               keyboardType: TextInputType.number,
               onChanged: (value) {
                 if(value.length==0){
@@ -189,9 +194,14 @@ class _PackageScreenState extends ConsumerState<PackageScreen> {
                 }
                 
               },
+              style: TextStyle(color: Colors.white),
               decoration: InputDecoration(
+                hintStyle: TextStyle(fontSize: h*0.02, color: Colors.white),
                 border: OutlineInputBorder(),
                 hintText: 'Sila isi bilangan bulan',
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(width: 1, color: Colors.yellow), //<-- SEE HERE
+                ),
               ),
             ),
             SizedBox(height: 16.0),
@@ -200,6 +210,7 @@ class _PackageScreenState extends ConsumerState<PackageScreen> {
               style: TextStyle(
                 fontSize: 16.0,
                 fontWeight: FontWeight.bold,
+                color: Colors.white
               ),
             ),
             SizedBox(height: 8.0),
@@ -211,9 +222,14 @@ class _PackageScreenState extends ConsumerState<PackageScreen> {
                   _yearController.text = value.toString();
                 });
               },
+              style: TextStyle(color: Colors.white),
               decoration: InputDecoration(
+                hintStyle: TextStyle(fontSize: h*0.02, color: Colors.white),
                 border: OutlineInputBorder(),
                 hintText: 'Sila isi bilangan bulan',
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(width: 1, color: Colors.yellow), //<-- SEE HERE
+                ),
               ),
             ),
             SizedBox(height: 16.0),
@@ -223,6 +239,7 @@ class _PackageScreenState extends ConsumerState<PackageScreen> {
               style: TextStyle(
                 fontSize: 16.0,
                 fontWeight: FontWeight.bold,
+                color: Colors.white
               ),
             ):SizedBox(),
             SizedBox(height: 8.0),
@@ -280,7 +297,7 @@ class _PackageScreenState extends ConsumerState<PackageScreen> {
             SizedBox(height: 8.0),
             ElevatedButton(
               onPressed: _pickFile,
-              child: Text('Pilih Resit'),
+              child: Text('Muatnaik Resit'),
             ),
             SizedBox(height: 8.0),
             Expanded(child: _previewWidget != null ? _previewWidget : Container()),

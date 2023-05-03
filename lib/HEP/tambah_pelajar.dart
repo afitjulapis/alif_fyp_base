@@ -36,8 +36,9 @@ class _TambahPelajarState extends ConsumerState<TambahPelajar> {
     var w = MediaQuery.of(context).size.width;
     var h = MediaQuery.of(context).size.height;
     return Scaffold(
+      backgroundColor: Colors.grey[800],
       floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: Colors.green,
+        backgroundColor: ref.watch(turqose),
         label: Row(
           children: [
             Padding(
@@ -88,6 +89,7 @@ class _TambahPelajarState extends ConsumerState<TambahPelajar> {
         },
       ),
       appBar: AppBar(
+        backgroundColor: ref.watch(turqose),
         title:Container(
           child: Text('TAMBAH PELAJAR',style: TextStyle(fontSize:h*0.02,fontWeight: FontWeight.bold,color: Colors.black),textAlign: TextAlign.center,overflow: TextOverflow.ellipsis,maxLines: 6,)
         ), 
@@ -107,7 +109,7 @@ class _TambahPelajarState extends ConsumerState<TambahPelajar> {
               // width: w*0.6,
               child: Row(
                 children: [
-                  Text('IC Pelajar : ',style: TextStyle(fontSize:h*0.02,fontWeight: FontWeight.bold,color: Colors.black),textAlign: TextAlign.start,overflow: TextOverflow.ellipsis,maxLines: 6,),
+                  Text('IC Pelajar : ',style: TextStyle(fontSize:h*0.02,fontWeight: FontWeight.bold,color: Colors.white),textAlign: TextAlign.start,overflow: TextOverflow.ellipsis,maxLines: 6,),
                   
                 ],
               )
@@ -164,7 +166,7 @@ class _TambahPelajarState extends ConsumerState<TambahPelajar> {
               // width: w*0.6,
               child: Row(
                 children: [
-                  Text('Nama Pelajar : ',style: TextStyle(fontSize:h*0.02,fontWeight: FontWeight.bold,color: Colors.black),textAlign: TextAlign.start,overflow: TextOverflow.ellipsis,maxLines: 6,),
+                  Text('Nama Pelajar : ',style: TextStyle(fontSize:h*0.02,fontWeight: FontWeight.bold,color: Colors.white),textAlign: TextAlign.start,overflow: TextOverflow.ellipsis,maxLines: 6,),
                   
                 ],
               )
@@ -221,7 +223,7 @@ class _TambahPelajarState extends ConsumerState<TambahPelajar> {
           //     // width: w*0.6,
           //     child: Row(
           //       children: [
-          //         Text('Pakej : ',style: TextStyle(fontSize:h*0.02,fontWeight: FontWeight.bold,color: Colors.black),textAlign: TextAlign.start,overflow: TextOverflow.ellipsis,maxLines: 6,),
+          //         Text('Pakej : ',style: TextStyle(fontSize:h*0.02,fontWeight: FontWeight.bold,color: Colors.white),textAlign: TextAlign.start,overflow: TextOverflow.ellipsis,maxLines: 6,),
                   
           //       ],
           //     )
@@ -278,7 +280,7 @@ class _TambahPelajarState extends ConsumerState<TambahPelajar> {
               // width: w*0.6,
               child: Row(
                 children: [
-                  Text('No. Tel. Penjaga : ',style: TextStyle(fontSize:h*0.02,fontWeight: FontWeight.bold,color: Colors.black),textAlign: TextAlign.start,overflow: TextOverflow.ellipsis,maxLines: 6,),
+                  Text('No. Tel. Penjaga : ',style: TextStyle(fontSize:h*0.02,fontWeight: FontWeight.bold,color: Colors.white),textAlign: TextAlign.start,overflow: TextOverflow.ellipsis,maxLines: 6,),
                   
                 ],
               )
@@ -335,7 +337,7 @@ class _TambahPelajarState extends ConsumerState<TambahPelajar> {
               // width: w*0.6,
               child: Row(
                 children: [
-                  Text('Emel Penjaga : ',style: TextStyle(fontSize:h*0.02,fontWeight: FontWeight.bold,color: Colors.black),textAlign: TextAlign.start,overflow: TextOverflow.ellipsis,maxLines: 6,),
+                  Text('Emel Penjaga : ',style: TextStyle(fontSize:h*0.02,fontWeight: FontWeight.bold,color: Colors.white),textAlign: TextAlign.start,overflow: TextOverflow.ellipsis,maxLines: 6,),
                   
                 ],
               )
@@ -392,7 +394,7 @@ class _TambahPelajarState extends ConsumerState<TambahPelajar> {
               // width: w*0.6,
               child: Row(
                 children: [
-                  Text('Tahap : ',style: TextStyle(fontSize:h*0.02,fontWeight: FontWeight.bold,color: Colors.black),textAlign: TextAlign.start,overflow: TextOverflow.ellipsis,maxLines: 6,),
+                  Text('Tahap : ',style: TextStyle(fontSize:h*0.02,fontWeight: FontWeight.bold,color: Colors.white),textAlign: TextAlign.start,overflow: TextOverflow.ellipsis,maxLines: 6,),
                   
                 ],
               )
@@ -453,7 +455,7 @@ class _TambahPelajarState extends ConsumerState<TambahPelajar> {
               // width: w*0.6,
               child: Row(
                 children: [
-                  Text('Pakej : ',style: TextStyle(fontSize:h*0.02,fontWeight: FontWeight.bold,color: Colors.black),textAlign: TextAlign.start,overflow: TextOverflow.ellipsis,maxLines: 6,),
+                  Text('Pakej : ',style: TextStyle(fontSize:h*0.02,fontWeight: FontWeight.bold,color: Colors.white),textAlign: TextAlign.start,overflow: TextOverflow.ellipsis,maxLines: 6,),
                   
                 ],
               )
@@ -558,7 +560,7 @@ class _TambahPelajarState extends ConsumerState<TambahPelajar> {
               // width: w*0.6,
               child: Row(
                 children: [
-                  Text('Subjek : ',style: TextStyle(fontSize:h*0.02,fontWeight: FontWeight.bold,color: Colors.black),textAlign: TextAlign.start,overflow: TextOverflow.ellipsis,maxLines: 6,),
+                  Text('Subjek : ',style: TextStyle(fontSize:h*0.02,fontWeight: FontWeight.bold,color: Colors.white),textAlign: TextAlign.start,overflow: TextOverflow.ellipsis,maxLines: 6,),
                   
                 ],
               )
@@ -571,7 +573,8 @@ class _TambahPelajarState extends ConsumerState<TambahPelajar> {
               itemCount: availableSubjeks.length, // change this to the number of widgets you want to display
               itemBuilder: (BuildContext context, int index) {
                 return CheckboxListTile(
-                  title: Text(availableSubjeks[index],style: TextStyle(fontSize:h*0.02,fontWeight: FontWeight.normal,color: Colors.black),textAlign: TextAlign.start,overflow: TextOverflow.ellipsis,maxLines: 6,),
+                  activeColor: ref.read(turqose),
+                  title: Text(availableSubjeks[index],style: TextStyle(fontSize:h*0.02,fontWeight: FontWeight.normal,color: Colors.white),textAlign: TextAlign.start,overflow: TextOverflow.ellipsis,maxLines: 6,),
                   value: subjek.contains(availableSubjeks[index])? true :false,
                   onChanged: (newValue) {
                     setState(() {
@@ -590,7 +593,7 @@ class _TambahPelajarState extends ConsumerState<TambahPelajar> {
           ):Container(),
           
           // CheckboxListTile(
-          //   title: Text('BAHASA INGGERIS ',style: TextStyle(fontSize:h*0.02,fontWeight: FontWeight.normal,color: Colors.black),textAlign: TextAlign.start,overflow: TextOverflow.ellipsis,maxLines: 6,),
+          //   title: Text('BAHASA INGGERIS ',style: TextStyle(fontSize:h*0.02,fontWeight: FontWeight.normal,color: Colors.white),textAlign: TextAlign.start,overflow: TextOverflow.ellipsis,maxLines: 6,),
           //   value: subjek.contains('BAHASA INGGERIS')? true :false,
           //   onChanged: (newValue) {
           //     setState(() {
@@ -604,7 +607,7 @@ class _TambahPelajarState extends ConsumerState<TambahPelajar> {
           //   controlAffinity: ListTileControlAffinity.leading,  //  <-- leading Checkbox
           // ),
           // CheckboxListTile(
-          //   title: Text('SCIENCE ',style: TextStyle(fontSize:h*0.02,fontWeight: FontWeight.normal,color: Colors.black),textAlign: TextAlign.start,overflow: TextOverflow.ellipsis,maxLines: 6,),
+          //   title: Text('SCIENCE ',style: TextStyle(fontSize:h*0.02,fontWeight: FontWeight.normal,color: Colors.white),textAlign: TextAlign.start,overflow: TextOverflow.ellipsis,maxLines: 6,),
           //   value: subjek.contains('SCIENCE')? true :false,
           //   onChanged: (newValue) {
           //     setState(() {
@@ -618,7 +621,7 @@ class _TambahPelajarState extends ConsumerState<TambahPelajar> {
           //   controlAffinity: ListTileControlAffinity.leading,  //  <-- leading Checkbox
           // ),
           // CheckboxListTile(
-          //   title: Text('MATEMATIK ',style: TextStyle(fontSize:h*0.02,fontWeight: FontWeight.normal,color: Colors.black),textAlign: TextAlign.start,overflow: TextOverflow.ellipsis,maxLines: 6,),
+          //   title: Text('MATEMATIK ',style: TextStyle(fontSize:h*0.02,fontWeight: FontWeight.normal,color: Colors.white),textAlign: TextAlign.start,overflow: TextOverflow.ellipsis,maxLines: 6,),
           //   value: subjek.contains('MATEMATIK')? true :false,
           //   onChanged: (newValue) {
           //     setState(() {
@@ -632,7 +635,7 @@ class _TambahPelajarState extends ConsumerState<TambahPelajar> {
           //   controlAffinity: ListTileControlAffinity.leading,  //  <-- leading Checkbox
           // ),
           // CheckboxListTile(
-          //   title: Text('SEJARAH ',style: TextStyle(fontSize:h*0.02,fontWeight: FontWeight.normal,color: Colors.black),textAlign: TextAlign.start,overflow: TextOverflow.ellipsis,maxLines: 6,),
+          //   title: Text('SEJARAH ',style: TextStyle(fontSize:h*0.02,fontWeight: FontWeight.normal,color: Colors.white),textAlign: TextAlign.start,overflow: TextOverflow.ellipsis,maxLines: 6,),
           //   value: subjek.contains('SEJARAH')? true :false,
           //   onChanged: (newValue) {
           //     setState(() {

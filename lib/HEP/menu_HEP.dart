@@ -15,8 +15,9 @@ class MenuHEP extends ConsumerWidget {
     var w = MediaQuery.of(context).size.width;
     var h = MediaQuery.of(context).size.height;
     return Scaffold(
+      backgroundColor: Colors.grey[800],
       appBar: AppBar(
-        
+        backgroundColor: ref.read(turqose),
         title:Container(
           child: Text('HEP',style: TextStyle(fontSize:h*0.02,fontWeight: FontWeight.bold,color: Colors.black),textAlign: TextAlign.center,overflow: TextOverflow.ellipsis,maxLines: 6,)
         ), 
@@ -46,14 +47,14 @@ class MenuHEP extends ConsumerWidget {
                       height: h*0.07,
                       padding:  EdgeInsets.only(top: h*0.0,bottom: h*0.0 ,left: w*0.04,right: w*0.04),
                       decoration: BoxDecoration(
-                        color: Colors.green,
+                        color: ref.watch(turqose),
                         borderRadius: BorderRadius.circular(5),
                         // border: Border.all(color: Colors.yellow,width:2)
                       ),
                       child: Center(
                         child: Container(
                           // width: w*0.6,
-                          child: Text('TAMBAH PELAJAR',style: TextStyle(fontSize:h*0.018,fontWeight: FontWeight.bold,color: Colors.white),textAlign: TextAlign.center,overflow: TextOverflow.ellipsis,maxLines: 6,)
+                          child: Text('TAMBAH PELAJAR',style: TextStyle(fontSize:h*0.018,fontWeight: FontWeight.bold,color: Colors.black),textAlign: TextAlign.center,overflow: TextOverflow.ellipsis,maxLines: 6,)
                         ),
                       ),
                     ),
@@ -79,14 +80,14 @@ class MenuHEP extends ConsumerWidget {
                       height: h*0.07,
                       padding:  EdgeInsets.only(top: h*0.0,bottom: h*0.0 ,left: w*0.04,right: w*0.04),
                       decoration: BoxDecoration(
-                        color: Colors.blue,
+                        color: ref.watch(turqose),
                         borderRadius: BorderRadius.circular(5),
                         // border: Border.all(color: Colors.yellow,width:2)
                       ),
                       child: Center(
                         child: Container(
                           // width: w*0.6,
-                          child: Text('SENARAI PELAJAR',style: TextStyle(fontSize:h*0.018,fontWeight: FontWeight.bold,color: Colors.white),textAlign: TextAlign.center,overflow: TextOverflow.ellipsis,maxLines: 6,)
+                          child: Text('SENARAI PELAJAR',style: TextStyle(fontSize:h*0.018,fontWeight: FontWeight.bold,color: Colors.black),textAlign: TextAlign.center,overflow: TextOverflow.ellipsis,maxLines: 6,)
                         ),
                       ),
                     ),

@@ -6,21 +6,21 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttericon/font_awesome5_icons.dart';
 
 import '../Riverpod/user_data.dart';
-
-class DashboardAdmin extends StatefulWidget {
-  // const DashboardAdmin({ Key? key }) : super(key: key);
-
+class DashboardAdmin extends ConsumerStatefulWidget {
   @override
-  State<DashboardAdmin> createState() => _DashboardAdminState();
+  ConsumerState<DashboardAdmin> createState() => _DashboardAdminState();
 }
 
-class _DashboardAdminState extends State<DashboardAdmin> {
+// 2. extend [ConsumerState]
+class _DashboardAdminState extends ConsumerState<DashboardAdmin> {
   @override
   Widget build(BuildContext context) {
     var w = MediaQuery.of(context).size.width;
     var h = MediaQuery.of(context).size.height;
     return Scaffold(
+      backgroundColor: Colors.grey[800],
       appBar: AppBar(
+        backgroundColor: ref.read(turqose),
         title:Container(
           child: Text('DASHBOARD ADMIN',style: TextStyle(fontSize:h*0.02,fontWeight: FontWeight.bold,color: Colors.black),textAlign: TextAlign.center,overflow: TextOverflow.ellipsis,maxLines: 6,)
         ), 
@@ -65,14 +65,14 @@ class _DashboardAdminState extends State<DashboardAdmin> {
                                     height: h*0.07,
                                     padding:  EdgeInsets.only(top: h*0.0,bottom: h*0.0 ,left: w*0.04,right: w*0.04),
                                     decoration: BoxDecoration(
-                                      color: Colors.yellow,
+                                      color: ref.watch(turqose),
                                       borderRadius: BorderRadius.circular(5),
-                                      border: Border.all(color: Colors.yellow,width:2)
+                                      border: Border.all(color: ref.watch(turqose),width:2)
                                     ),
                                     child: Center(
                                       child: Container(
                                         // width: w*0.6,
-                                        child: Text('HEP',style: TextStyle(fontSize:h*0.015,fontWeight: FontWeight.bold,color: Colors.white),textAlign: TextAlign.center,overflow: TextOverflow.ellipsis,maxLines: 6,)
+                                        child: Text('HEP',style: TextStyle(fontSize:h*0.015,fontWeight: FontWeight.bold,color: Colors.black),textAlign: TextAlign.center,overflow: TextOverflow.ellipsis,maxLines: 6,)
                                       ),
                                     ),
                                   ),
@@ -89,11 +89,11 @@ class _DashboardAdminState extends State<DashboardAdmin> {
                                 height: h*0.1,
                                 padding:  EdgeInsets.only(top: h*0.0,bottom: h*0.0 ,left: w*0.04,right: w*0.04),
                                 decoration: BoxDecoration(
-                                  color: Colors.white,
+                                  color: Colors.grey[800],
                                   borderRadius: BorderRadius.circular(h),
-                                  border: Border.all(color: Colors.yellow,width:2)
+                                  border: Border.all(color: ref.watch(turqose),width:2)
                                 ),
-                                child: Icon(FontAwesome5.sitemap,color: Colors.yellow, size: h*0.03,)
+                                child: Icon(FontAwesome5.sitemap,color: ref.watch(turqose), size: h*0.03,)
                               ),
                             ],
                           ),
@@ -133,14 +133,14 @@ class _DashboardAdminState extends State<DashboardAdmin> {
                                           height: h*0.07,
                                           padding:  EdgeInsets.only(top: h*0.0,bottom: h*0.0 ,left: w*0.04,right: w*0.04),
                                           decoration: BoxDecoration(
-                                            color: Colors.green,
+                                            color: ref.watch(turqose),
                                             borderRadius: BorderRadius.circular(5),
-                                            border: Border.all(color: Colors.green,width:2)
+                                            border: Border.all(color: ref.watch(turqose),width:2)
                                           ),
                                           child: Center(
                                             child: Container(
                                               // width: w*0.6,
-                                              child: Text('PEMBAYARAN',style: TextStyle(fontSize:h*0.015,fontWeight: FontWeight.bold,color: Colors.white),textAlign: TextAlign.center,overflow: TextOverflow.ellipsis,maxLines: 6,)
+                                              child: Text('PEMBAYARAN',style: TextStyle(fontSize:h*0.015,fontWeight: FontWeight.bold,color: Colors.black),textAlign: TextAlign.center,overflow: TextOverflow.ellipsis,maxLines: 6,)
                                             ),
                                           ),
                                         ),
@@ -159,11 +159,11 @@ class _DashboardAdminState extends State<DashboardAdmin> {
                                       height: h*0.1,
                                       padding:  EdgeInsets.only(top: h*0.0,bottom: h*0.0 ,left: w*0.04,right: w*0.04),
                                       decoration: BoxDecoration(
-                                        color: Colors.white,
+                                        color: Colors.grey[800],
                                         borderRadius: BorderRadius.circular(h),
-                                        border: Border.all(color: Colors.green,width:2)
+                                        border: Border.all(color: ref.watch(turqose),width:2)
                                       ),
-                                      child: Icon(FontAwesome5.money_bill,color: Colors.green, size: h*0.03,)
+                                      child: Icon(FontAwesome5.money_bill,color: ref.watch(turqose), size: h*0.03,)
                                     ),
                                   ],
                                 ),
@@ -195,7 +195,7 @@ class _DashboardAdminState extends State<DashboardAdmin> {
                         return Text(error.toString());
                       }, 
                       loading: (){
-                        return Center(child: CircularProgressIndicator(color: Colors.green,));
+                        return Center(child: CircularProgressIndicator(color: ref.watch(turqose),));
                       }
                     );
                   },),
@@ -211,7 +211,7 @@ class _DashboardAdminState extends State<DashboardAdmin> {
                       data: (data){
                         return Container(
                           // width: w*0.6,
-                          child: Text('Jumlah Pelajar: '+data.length.toString(),style: TextStyle(fontSize:h*0.02,fontWeight: FontWeight.bold,color: Colors.black),textAlign: TextAlign.center,overflow: TextOverflow.ellipsis,maxLines: 6,)
+                          child: Text('Jumlah Pelajar: '+data.length.toString(),style: TextStyle(fontSize:h*0.025,fontWeight: FontWeight.bold,color: Colors.white),textAlign: TextAlign.center,overflow: TextOverflow.ellipsis,maxLines: 6,)
                         );
                       }, 
                       error: (e,st){

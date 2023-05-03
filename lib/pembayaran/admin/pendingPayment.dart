@@ -34,11 +34,11 @@ class _PengesahanRekodBayaranState extends ConsumerState<PengesahanRekodBayaran>
     var w = MediaQuery.of(context).size.width;
     var h = MediaQuery.of(context).size.height;
     return  Scaffold(
-      
+      backgroundColor: Colors.grey[800],
       appBar: AppBar(
-        backgroundColor: Colors.yellow,
+        backgroundColor: ref.read(turqose),
         title:Container(
-          child: Text('Pengesahan Bayaran',style: TextStyle(fontSize:h*0.02,fontWeight: FontWeight.normal,color: Colors.black),textAlign: TextAlign.center,overflow: TextOverflow.ellipsis,maxLines: 6,)
+          child: Text('Pengesahan Pembayaran',style: TextStyle(fontSize:h*0.02,fontWeight: FontWeight.normal,color: Colors.black),textAlign: TextAlign.center,overflow: TextOverflow.ellipsis,maxLines: 6,)
         ), 
         leading: InkWell(
           onTap: (){
@@ -68,7 +68,7 @@ class _PengesahanRekodBayaranState extends ConsumerState<PengesahanRekodBayaran>
                                   },
                                   child: Container(
                                     width: w,
-                                    color: Colors.yellow,
+                                    color: ref.read(turqose),
                                     child: Padding(
                                       padding: EdgeInsets.only(top: h*0.01,bottom: h*0.01 ,left: w*0.04,right: w*0.04),
                                       child: Row(
@@ -81,7 +81,7 @@ class _PengesahanRekodBayaranState extends ConsumerState<PengesahanRekodBayaran>
                                               color: Colors.black,
                                               borderRadius: BorderRadius.circular(h),
                                             ),
-                                            child: Icon(Icons.receipt,color: Colors.yellow,)
+                                            child: Icon(Icons.receipt,color: ref.read(turqose),)
                                           ),
                                           SizedBox(width: w*0.04,),
                                           Column(
@@ -186,7 +186,7 @@ class _PengesahanRekodBayaranState extends ConsumerState<PengesahanRekodBayaran>
                       
                       }else{
                         return Center(
-                          child: Text('Tiada bayaran buat masa ini',style: TextStyle(fontSize:h*0.02,fontWeight: FontWeight.normal,color: Colors.black),textAlign: TextAlign.start,overflow: TextOverflow.ellipsis,maxLines: 6,),
+                          child: Text('Tiada bayaran buat masa ini',style: TextStyle(fontSize:h*0.025,fontWeight: FontWeight.normal,color: Colors.white),textAlign: TextAlign.start,overflow: TextOverflow.ellipsis,maxLines: 6,),
                         );
                       }
                       
@@ -195,7 +195,7 @@ class _PengesahanRekodBayaranState extends ConsumerState<PengesahanRekodBayaran>
                       return Text(e.toString());
                     }, 
                     loading: (){
-                      return Center(child: CircularProgressIndicator(color: Colors.yellow,));
+                      return Center(child: CircularProgressIndicator(color: ref.read(turqose),));
                       
                     }
                   );

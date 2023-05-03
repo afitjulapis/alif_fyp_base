@@ -22,6 +22,7 @@ class Peraturan extends StatelessWidget {
     var w = MediaQuery.of(context).size.width;
     var h = MediaQuery.of(context).size.height;
     return Scaffold(
+      backgroundColor: Colors.grey[800],
       appBar: AppBar(
         title: Text('Peraturan'),
       ),

@@ -62,7 +62,7 @@ class _SemakPDFState extends ConsumerState<SemakPDF> {
     }
     return Scaffold(
       backgroundColor: Colors.black87,
-      appBar: AppBar(title: const Text('Semak Bayaran')),
+      appBar: AppBar(title: const Text('Semak Bayaran'),backgroundColor: ref.read(turqose),),
       floatingActionButton: 
         dataBytes!=null?
           Column(

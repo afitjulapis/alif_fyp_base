@@ -10,6 +10,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tuple/tuple.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+// COLORS ////////////////////////////////////////////////////////////
+// 00ABB3
+final turqose = StateProvider<Color>((ref) {
+  return Color(0xff00ABB3);
+});
+
+
+///////////////////////////////////////////////////////////////////
 
 
 final providerMain = Provider<DataPelajar>((ref) => DataPelajar());
@@ -86,6 +94,8 @@ final dataPelajarSearch = StateProvider<List>((ref) {
 final currentPendID = StateProvider<List>((ref) {
   return [];
 });
+
+
 
 
 final FirebaseFirestore firestore2 = FirebaseFirestore.instance;

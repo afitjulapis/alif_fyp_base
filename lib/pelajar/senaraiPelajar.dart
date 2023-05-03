@@ -20,9 +20,9 @@ class _SenaraiPelajarState extends ConsumerState<SenaraiPelajar> {
     var w = MediaQuery.of(context).size.width;
     var h = MediaQuery.of(context).size.height;
     return  Scaffold(
-      
+      backgroundColor: Colors.grey[800],
       appBar: AppBar(
-        backgroundColor: Colors.green,
+        backgroundColor: ref.read(turqose),
         title:Container(
           child: Text('SENARAI PELAJAR',style: TextStyle(fontSize:h*0.02,fontWeight: FontWeight.bold,color: Colors.black),textAlign: TextAlign.center,overflow: TextOverflow.ellipsis,maxLines: 6,)
         ), 
@@ -138,7 +138,7 @@ class _SenaraiPelajarState extends ConsumerState<SenaraiPelajar> {
                                     Navigator.push(context,MaterialPageRoute(builder: (context) => DetailPelajar(ref.read(dataPelajarGlobal)[index]))); // mcm hyperlink
                                   },
                                   child: Container(
-                                    color: Colors.green,
+                                    color: ref.read(turqose),
                                     child: Padding(
                                       padding: EdgeInsets.only(top: h*0.01,bottom: h*0.01 ,left: w*0.04,right: w*0.04),
                                       child: Row(
@@ -152,10 +152,12 @@ class _SenaraiPelajarState extends ConsumerState<SenaraiPelajar> {
                                               borderRadius: BorderRadius.circular(h),
                                               border: Border.all(color: Colors.blue,width:2)
                                             ),
-                                            child: Center(child: Text('Log Masuk',style: TextStyle(fontSize:h*0.02,fontWeight: FontWeight.bold,color: Colors.white),textAlign: TextAlign.center,overflow: TextOverflow.ellipsis,maxLines: 6,))
+                                            child: Center(child: Icon(Icons.person))
                                           ),
                                           SizedBox(width: w*0.02,),
-                                          Text(ref.read(dataPelajarGlobal)[index]['name']),
+                                          Container(
+                                            width: w*0.7,
+                                            child: Text(ref.read(dataPelajarGlobal)[index]['name'])),
                                         ],
                                       ),
                                     ),
@@ -176,7 +178,7 @@ class _SenaraiPelajarState extends ConsumerState<SenaraiPelajar> {
                                     Navigator.push(context,MaterialPageRoute(builder: (context) => DetailPelajar(ref.read(dataPelajarSearch)[index]))); // mcm hyperlink
                                   },
                                   child: Container(
-                                    color: Colors.green,
+                                    color: ref.read(turqose),
                                     child: Padding(
                                       padding: EdgeInsets.only(top: h*0.01,bottom: h*0.01 ,left: w*0.04,right: w*0.04),
                                       child: Row(
