@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:e_pibg/Riverpod/register_user.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -7,14 +8,23 @@ import 'package:tuple/tuple.dart';
 import '../Riverpod/user_data.dart';
 import '../pelajar/senaraiPelajar.dart';
 
-class TambahPelajar extends ConsumerStatefulWidget {
+class EditPelajar extends ConsumerStatefulWidget {
+
+  final dataPelajar;
+  final idPelajar;
+
+  EditPelajar(this.dataPelajar,this.idPelajar);
   @override
-  ConsumerState<TambahPelajar> createState() => _TambahPelajarState();
+  ConsumerState<EditPelajar> createState() => _EditPelajarState();
 }
 
 // 2. extend [ConsumerState]
-class _TambahPelajarState extends ConsumerState<TambahPelajar> {
+class _EditPelajarState extends ConsumerState<EditPelajar> {
   // const TambahPelajar({super.key});
+  TextEditingController ic_control = TextEditingController();
+  TextEditingController name_control = TextEditingController();
+  TextEditingController no_tel_control = TextEditingController();
+
   var ic ='';
   var name ='';
   var emel ='';
@@ -29,6 +39,21 @@ class _TambahPelajarState extends ConsumerState<TambahPelajar> {
   bool isss = false;
   bool tahapReady = false;
   bool pakejReady = false;
+  bool dataEdited = false;
+
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    name_control.text =widget.dataPelajar['name'];
+    name = widget.dataPelajar['name'];
+    ic_control.text =widget.dataPelajar['ic'];
+    ic =widget.dataPelajar['ic'];
+    no_tel_control.text =widget.dataPelajar['phone'];
+    phone =widget.dataPelajar['phone'];
+
+    super.initState();
+  }
 
 
   @override
@@ -37,7 +62,8 @@ class _TambahPelajarState extends ConsumerState<TambahPelajar> {
     var h = MediaQuery.of(context).size.height;
     return Scaffold(
       backgroundColor: Colors.grey[800],
-      floatingActionButton: FloatingActionButton.extended(
+      floatingActionButton: pakejReady?
+      FloatingActionButton.extended(
         backgroundColor: ref.watch(turqose),
         label: Row(
           children: [
@@ -49,7 +75,7 @@ class _TambahPelajarState extends ConsumerState<TambahPelajar> {
                   children: [
                     Icon(Icons.check ,color: Colors.white,),
                     SizedBox(width: w*0.02,),
-                    Text('TAMBAH',style: TextStyle(fontSize:h*0.02,fontWeight: FontWeight.bold,color: Colors.white),textAlign: TextAlign.start,overflow: TextOverflow.ellipsis,maxLines: 6,),
+                    Text('KEMASKINI',style: TextStyle(fontSize:h*0.02,fontWeight: FontWeight.bold,color: Colors.white),textAlign: TextAlign.start,overflow: TextOverflow.ellipsis,maxLines: 6,),
                     
                   ],
                 )
@@ -58,16 +84,16 @@ class _TambahPelajarState extends ConsumerState<TambahPelajar> {
           ],
         ),
         onPressed: (){
-          if(subjek.length > maxSub){
+          if(subjek.length != maxSub){
             showDialog(
               context: context,
               builder: (BuildContext context) {
                 return AlertDialog(
                   title: Text("Bilangan Subjek Melebihi"),
-                  content: Text('Hanya ' +maxSub.toString()+' subjek sahaja untuk Pakej ' +pakej+ '.' ),
+                  content: Text('Sila pilih ' +maxSub.toString()+' subjek untuk Pakej ' +pakej+ '.' ),
                   actions: <Widget>[
                     TextButton(
-                      child: Text('Close'),
+                      child: Text('Tutup'),
                       onPressed: () {
                         Navigator.of(context).pop();
                       },
@@ -77,21 +103,36 @@ class _TambahPelajarState extends ConsumerState<TambahPelajar> {
               },
             );
           }else{
-           createNewUser(emel, ic).then((value){
-              ref.read(currerntUID.notifier).state = value!;
-              ref.read(addDataPelajar(Tuple7(ic, name, pakej, phone, subjek, tahap, ref)));
+            print(widget.idPelajar);
+            print(widget.dataPelajar);
+           FirebaseFirestore.instance.collection('pelajar').doc(widget.idPelajar).update({
+              'name': name,
+              'ic': ic,
+              'phone': phone,
+              'tahap': tahap,
+              'pakej': pakej,
+              'subjek': subjek,
+
+
+            }).then((value) {
+              print('Data updated successfully!');
+              print(widget.idPelajar);
               ref.invalidate(dataPelajar);
               Navigator.pop(context);
-            }); 
+              Navigator.pop(context);
+
+            }).catchError((error) {
+              print('Failed to update data: $error');
+            });
           }
           
           
         },
-      ),
+      ):Container(),
       appBar: AppBar(
         backgroundColor: ref.watch(turqose),
         title:Container(
-          child: Text('TAMBAH PELAJAR',style: TextStyle(fontSize:h*0.02,fontWeight: FontWeight.bold,color: Colors.black),textAlign: TextAlign.center,overflow: TextOverflow.ellipsis,maxLines: 6,)
+          child: Text('KEMASKINI PELAJAR',style: TextStyle(fontSize:h*0.02,fontWeight: FontWeight.bold,color: Colors.black),textAlign: TextAlign.center,overflow: TextOverflow.ellipsis,maxLines: 6,)
         ), 
         leading: InkWell(
           onTap: (){
@@ -99,6 +140,7 @@ class _TambahPelajarState extends ConsumerState<TambahPelajar> {
           },
           child: Icon(FontAwesome5.arrow_left)
         ),
+        
       ),
 
       body:ListView(
@@ -133,6 +175,7 @@ class _TambahPelajarState extends ConsumerState<TambahPelajar> {
                     width: w*0.5,
                     child: Center(
                       child: TextField(
+                        controller: ic_control,
                         obscureText: false,
                         textAlign: TextAlign.start,
                         keyboardType: TextInputType.text,
@@ -190,6 +233,7 @@ class _TambahPelajarState extends ConsumerState<TambahPelajar> {
                     width: w*0.5,
                     child: Center(
                       child: TextField(
+                        controller: name_control,
                         obscureText: false,
                         textAlign: TextAlign.start,
                         keyboardType: TextInputType.text,
@@ -217,63 +261,7 @@ class _TambahPelajarState extends ConsumerState<TambahPelajar> {
               ),
             ),
           ),
-          // Padding(
-          //   padding: EdgeInsets.only(top: h*0.02,bottom: h*0.01,left: w*0.04,right: w*0.04),
-          //   child: Container(
-          //     // width: w*0.6,
-          //     child: Row(
-          //       children: [
-          //         Text('Pakej : ',style: TextStyle(fontSize:h*0.02,fontWeight: FontWeight.bold,color: Colors.white),textAlign: TextAlign.start,overflow: TextOverflow.ellipsis,maxLines: 6,),
-                  
-          //       ],
-          //     )
-          //   ),
-          // ),
-          // Padding(
-          //   padding: EdgeInsets.only(top: h*0.0,bottom: h*0.0 ,left: w*0.04,right: w*0.04),
-          //   child: Container(
-          //     decoration: BoxDecoration(
-          //       color: Colors.grey,
-          //       borderRadius: BorderRadius.circular(10),
-          //       // border: Border.all(color: ref.watch(truegray),width:2)
-          //     ),
-          //     height: h*0.06,
-          //     child: Row(
-          //       mainAxisAlignment: MainAxisAlignment.start,
-          //       children: [
-          //         SizedBox(width: w*0.04,),
-          //         SizedBox(
-          //           height: h*0.06,
-          //           width: w*0.5,
-          //           child: Center(
-          //             child: TextField(
-          //               obscureText: false,
-          //               textAlign: TextAlign.start,
-          //               keyboardType: TextInputType.text,
-          //               maxLines: 1,
-          //               onChanged: (String txt) {
-          //                 if(txt.isEmpty){
-          //                   pakej='';
-          //                 }else{
-          //                   pakej=txt;
-          //                 }
-          //               },
-          //               style: TextStyle(
-          //                 fontSize: h*0.02,
-          //                 color: Colors.white
-          //               ),
-          //               decoration:  InputDecoration(
-          //                 border: InputBorder.none,
-          //                 hintText:  '',
-          //                 hintStyle: TextStyle(color:Colors.grey,fontSize: h*0.015),
-          //               ),
-          //             ),
-          //           ),
-          //         ),
-          //       ],
-          //     ),
-          //   ),
-          // ),
+          
           Padding(
             padding: EdgeInsets.only(top: h*0.02,bottom: h*0.01,left: w*0.04,right: w*0.04),
             child: Container(
@@ -304,6 +292,7 @@ class _TambahPelajarState extends ConsumerState<TambahPelajar> {
                     width: w*0.5,
                     child: Center(
                       child: TextField(
+                        controller: no_tel_control,
                         obscureText: false,
                         textAlign: TextAlign.start,
                         keyboardType: TextInputType.text,
@@ -313,63 +302,6 @@ class _TambahPelajarState extends ConsumerState<TambahPelajar> {
                             phone='';
                           }else{
                             phone=txt;
-                          }
-                        },
-                        style: TextStyle(
-                          fontSize: h*0.02,
-                          color: Colors.white
-                        ),
-                        decoration:  InputDecoration(
-                          border: InputBorder.none,
-                          hintText:  '',
-                          hintStyle: TextStyle(color:Colors.grey,fontSize: h*0.015),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.only(top: h*0.02,bottom: h*0.01,left: w*0.04,right: w*0.04),
-            child: Container(
-              // width: w*0.6,
-              child: Row(
-                children: [
-                  Text('Emel Penjaga : ',style: TextStyle(fontSize:h*0.02,fontWeight: FontWeight.bold,color: Colors.white),textAlign: TextAlign.start,overflow: TextOverflow.ellipsis,maxLines: 6,),
-                  
-                ],
-              )
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.only(top: h*0.0,bottom: h*0.0 ,left: w*0.04,right: w*0.04),
-            child: Container(
-              decoration: BoxDecoration(
-                color: Colors.grey,
-                borderRadius: BorderRadius.circular(10),
-                // border: Border.all(color: ref.watch(truegray),width:2)
-              ),
-              height: h*0.06,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  SizedBox(width: w*0.04,),
-                  SizedBox(
-                    height: h*0.06,
-                    width: w*0.5,
-                    child: Center(
-                      child: TextField(
-                        obscureText: false,
-                        textAlign: TextAlign.start,
-                        keyboardType: TextInputType.text,
-                        maxLines: 1,
-                        onChanged: (String txt) {
-                          if(txt.isEmpty){
-                            emel='';
-                          }else{
-                            emel=txt;
                           }
                         },
                         style: TextStyle(
@@ -508,51 +440,6 @@ class _TambahPelajarState extends ConsumerState<TambahPelajar> {
               );
             },),
           ): SizedBox(),
-          // Padding(
-          //   padding: EdgeInsets.only(top: h*0.0,bottom: h*0.0 ,left: w*0.04,right: w*0.04),
-          //   child: Container(
-          //     decoration: BoxDecoration(
-          //       color: Colors.grey,
-          //       borderRadius: BorderRadius.circular(10),
-          //       // border: Border.all(color: ref.watch(truegray),width:2)
-          //     ),
-          //     height: h*0.06,
-          //     child: Row(
-          //       mainAxisAlignment: MainAxisAlignment.start,
-          //       children: [
-          //         SizedBox(width: w*0.04,),
-          //         SizedBox(
-          //           height: h*0.06,
-          //           width: w*0.5,
-          //           child: Center(
-          //             child: TextField(
-          //               obscureText: false,
-          //               textAlign: TextAlign.start,
-          //               keyboardType: TextInputType.text,
-          //               maxLines: 1,
-          //               onChanged: (String txt) {
-          //                 if(txt.isEmpty){
-          //                   tahap='';
-          //                 }else{
-          //                   tahap=txt;
-          //                 }
-          //               },
-          //               style: TextStyle(
-          //                 fontSize: h*0.02,
-          //                 color: Colors.white
-          //               ),
-          //               decoration:  InputDecoration(
-          //                 border: InputBorder.none,
-          //                 hintText:  '',
-          //                 hintStyle: TextStyle(color:Colors.grey,fontSize: h*0.015),
-          //               ),
-          //             ),
-          //           ),
-          //         ),
-          //       ],
-          //     ),
-          //   ),
-          // ),
           pakejReady?
           Padding(
             padding: EdgeInsets.only(top: h*0.02,bottom: h*0.01,left: w*0.04,right: w*0.04),
@@ -591,63 +478,6 @@ class _TambahPelajarState extends ConsumerState<TambahPelajar> {
               },
             ),
           ):Container(),
-          
-          // CheckboxListTile(
-          //   title: Text('BAHASA INGGERIS ',style: TextStyle(fontSize:h*0.02,fontWeight: FontWeight.normal,color: Colors.white),textAlign: TextAlign.start,overflow: TextOverflow.ellipsis,maxLines: 6,),
-          //   value: subjek.contains('BAHASA INGGERIS')? true :false,
-          //   onChanged: (newValue) {
-          //     setState(() {
-          //       if(subjek.contains('BAHASA INGGERIS')){
-          //         subjek.remove('BAHASA INGGERIS');
-          //       }else{
-          //         subjek.add('BAHASA INGGERIS');
-          //       }
-          //     });
-          //   },
-          //   controlAffinity: ListTileControlAffinity.leading,  //  <-- leading Checkbox
-          // ),
-          // CheckboxListTile(
-          //   title: Text('SCIENCE ',style: TextStyle(fontSize:h*0.02,fontWeight: FontWeight.normal,color: Colors.white),textAlign: TextAlign.start,overflow: TextOverflow.ellipsis,maxLines: 6,),
-          //   value: subjek.contains('SCIENCE')? true :false,
-          //   onChanged: (newValue) {
-          //     setState(() {
-          //       if(subjek.contains('SCIENCE')){
-          //         subjek.remove('SCIENCE');
-          //       }else{
-          //         subjek.add('SCIENCE');
-          //       }
-          //     });
-          //   },
-          //   controlAffinity: ListTileControlAffinity.leading,  //  <-- leading Checkbox
-          // ),
-          // CheckboxListTile(
-          //   title: Text('MATEMATIK ',style: TextStyle(fontSize:h*0.02,fontWeight: FontWeight.normal,color: Colors.white),textAlign: TextAlign.start,overflow: TextOverflow.ellipsis,maxLines: 6,),
-          //   value: subjek.contains('MATEMATIK')? true :false,
-          //   onChanged: (newValue) {
-          //     setState(() {
-          //       if(subjek.contains('MATEMATIK')){
-          //         subjek.remove('MATEMATIK');
-          //       }else{
-          //         subjek.add('MATEMATIK');
-          //       }
-          //     });
-          //   },
-          //   controlAffinity: ListTileControlAffinity.leading,  //  <-- leading Checkbox
-          // ),
-          // CheckboxListTile(
-          //   title: Text('SEJARAH ',style: TextStyle(fontSize:h*0.02,fontWeight: FontWeight.normal,color: Colors.white),textAlign: TextAlign.start,overflow: TextOverflow.ellipsis,maxLines: 6,),
-          //   value: subjek.contains('SEJARAH')? true :false,
-          //   onChanged: (newValue) {
-          //     setState(() {
-          //       if(subjek.contains('SEJARAH')){
-          //         subjek.remove('SEJARAH');
-          //       }else{
-          //         subjek.add('SEJARAH');
-          //       }
-          //     });
-          //   },
-          //   controlAffinity: ListTileControlAffinity.leading,  //  <-- leading Checkbox
-          // ),
           
         ],
       )

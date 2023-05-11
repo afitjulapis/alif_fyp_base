@@ -10,6 +10,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tuple/tuple.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+// COLORS ////////////////////////////////////////////////////////////
+// 00ABB3
+final turqose = StateProvider<Color>((ref) {
+  return Color(0xff00ABB3);
+});
+
+
+///////////////////////////////////////////////////////////////////
 
 
 final providerMain = Provider<DataPelajar>((ref) => DataPelajar());
@@ -79,13 +87,27 @@ final dataPelajarGlobal = StateProvider<List>((ref) {
   return [];
 });
 
+final IDPelajarGlobal = StateProvider<List>((ref) {
+  return [];
+});
+
 final dataPelajarSearch = StateProvider<List>((ref) {
+  return [];
+});
+
+final IDPelajarSearch = StateProvider<List>((ref) {
   return [];
 });
 
 final currentPendID = StateProvider<List>((ref) {
   return [];
 });
+
+final currentStdID = StateProvider<String>((ref) {
+  return '';
+});
+
+
 
 
 final FirebaseFirestore firestore2 = FirebaseFirestore.instance;
@@ -100,6 +122,8 @@ Future<dynamic> getOnepelajar(WidgetRef ref) async {
     if (snapshot.exists) {
       // Document exists, do something with it
       Object? data = snapshot.data();
+      var id_data = snapshot.id;
+      ref.read(currentStdID.notifier).state =id_data;
       return data;
       print(data);
     } else {
@@ -200,10 +224,15 @@ class DataPelajar {
     try{
       QuerySnapshot querySnapshot = await getData.get();
       var dataPelajars = querySnapshot.docs.map((doc) => doc.data()).toList();
-      // var dataPelajarsDocID = querySnapshot.docs.map((doc) => doc.id).toList();
+      var dataPelajarsDocID = querySnapshot.docs.map((doc) => doc.id).toList();
       ref.invalidate(dataPelajarGlobal);
+      ref.invalidate(IDPelajarGlobal);
+
       ref.read(dataPelajarGlobal.notifier).state = dataPelajars;
-      print(ref.read(dataPelajarGlobal));
+      ref.read(IDPelajarGlobal.notifier).state = dataPelajarsDocID;
+
+      print('DATA ID PELAJAR');
+      print(ref.read(IDPelajarGlobal));
       return dataPelajars;
       
     }on FirebaseException catch (e){

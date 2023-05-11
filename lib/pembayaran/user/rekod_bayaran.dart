@@ -20,7 +20,7 @@ class _RekodBayaranState extends ConsumerState<RekodBayaran> {
     var w = MediaQuery.of(context).size.width;
     var h = MediaQuery.of(context).size.height;
     return  Scaffold(
-      
+      backgroundColor: Colors.grey[800],
       appBar: AppBar(
         backgroundColor: Colors.yellow,
         title:Container(
@@ -72,7 +72,8 @@ class _RekodBayaranState extends ConsumerState<RekodBayaran> {
                                             crossAxisAlignment: CrossAxisAlignment.start,
                                             children: [
                                               Container(
-                                                child: Text(data[index]['title'],style: TextStyle(fontSize:h*0.02,fontWeight: FontWeight.bold,color: Colors.black),textAlign: TextAlign.center,overflow: TextOverflow.ellipsis,maxLines: 6,)
+                                                width: w*0.7,
+                                                child: Text(data[index]['title'],style: TextStyle(fontSize:h*0.02,fontWeight: FontWeight.bold,color: Colors.black),textAlign: TextAlign.start,overflow: TextOverflow.ellipsis,maxLines: 6,)
                                               ),
                                               Container(
                                                 child: Text(data[index]['status'],style: TextStyle(fontSize:h*0.016,fontWeight: FontWeight.normal,color: Colors.black),textAlign: TextAlign.center,overflow: TextOverflow.ellipsis,maxLines: 6,)

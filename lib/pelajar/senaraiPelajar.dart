@@ -15,14 +15,53 @@ class SenaraiPelajar extends ConsumerStatefulWidget {
 // 2. extend [ConsumerState]
 class _SenaraiPelajarState extends ConsumerState<SenaraiPelajar> {
   var search='';
+
+  void deleteData(stdID) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Pengesahan"),
+          content: Text('Padam maklumat pelajar ini?' ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Tutup'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+
+            TextButton(
+              child: Text('Padam Pelajar'),
+              onPressed: () {
+                FirebaseFirestore.instance.collection('pelajar').doc(stdID).delete().then((value) {
+                  ref.invalidate(dataPelajar);
+                  setState(() {
+                    search='';
+                  });
+                  ref.invalidate(searchName);
+                  Navigator.pop(context);
+                  
+
+                }).catchError((error) {
+                  print('Failed to delete document: $error');
+                });
+              },
+            ),
+          ],
+        );
+      },
+    );
+    
+  }
   @override
   Widget build(BuildContext context) {
     var w = MediaQuery.of(context).size.width;
     var h = MediaQuery.of(context).size.height;
     return  Scaffold(
-      
+      backgroundColor: Colors.grey[800],
       appBar: AppBar(
-        backgroundColor: Colors.green,
+        backgroundColor: ref.read(turqose),
         title:Container(
           child: Text('SENARAI PELAJAR',style: TextStyle(fontSize:h*0.02,fontWeight: FontWeight.bold,color: Colors.black),textAlign: TextAlign.center,overflow: TextOverflow.ellipsis,maxLines: 6,)
         ), 
@@ -84,11 +123,17 @@ class _SenaraiPelajarState extends ConsumerState<SenaraiPelajar> {
                                                 }else{
                                                   ref.read(searchName.notifier).state=txt;
                                                   ref.invalidate(dataPelajarSearch);
+                                                  ref.invalidate(IDPelajarSearch);
+
                                                   for (var i = 0; i < ref.read(dataPelajarGlobal).length; i++) {
                                                     var data =ref.read(dataPelajarGlobal)[i];
+                                                    var id_data =ref.read(IDPelajarGlobal)[i];
+
                                                     
                                                     if(data['name'].toString().toLowerCase().contains(txt.toString().toLowerCase())){
                                                       ref.read(dataPelajarSearch.notifier).state.add(data);
+                                                      ref.read(IDPelajarSearch.notifier).state.add(id_data);
+
                                                     }
                                                   }
 
@@ -133,33 +178,65 @@ class _SenaraiPelajarState extends ConsumerState<SenaraiPelajar> {
                           itemBuilder: (BuildContext context, int index) {
                               return Padding(
                                 padding: EdgeInsets.only(top: h*0.01,bottom: h*0.01 ,left: w*0.0,right: w*0.0),
-                                child: InkWell(
-                                  onTap: (){
-                                    Navigator.push(context,MaterialPageRoute(builder: (context) => DetailPelajar(ref.read(dataPelajarGlobal)[index]))); // mcm hyperlink
-                                  },
-                                  child: Container(
-                                    color: Colors.green,
-                                    child: Padding(
-                                      padding: EdgeInsets.only(top: h*0.01,bottom: h*0.01 ,left: w*0.04,right: w*0.04),
-                                      child: Row(
-                                        children: [
-                                          
-                                          Container(
-                                            width: h*0.05,
-                                            height: h*0.05,
-                                            decoration: BoxDecoration(
-                                              color: Colors.white,
-                                              borderRadius: BorderRadius.circular(h),
-                                              border: Border.all(color: Colors.blue,width:2)
-                                            ),
-                                            child: Center(child: Text('Log Masuk',style: TextStyle(fontSize:h*0.02,fontWeight: FontWeight.bold,color: Colors.white),textAlign: TextAlign.center,overflow: TextOverflow.ellipsis,maxLines: 6,))
+                                child: Row(
+                                  children: [
+                                    InkWell(
+                                      onTap: (){
+                                        Navigator.push(context,MaterialPageRoute(builder: (context) => DetailPelajar(ref.read(dataPelajarGlobal)[index],ref.read(IDPelajarGlobal)[index]))); // mcm hyperlink
+                                      },
+                                      child: Container(
+                                        color: ref.read(turqose),
+                                        child: Padding(
+                                          padding: EdgeInsets.only(top: h*0.01,bottom: h*0.01 ,left: w*0.04,right: w*0.04),
+                                          child: Row(
+                                            children: [
+                                              
+                                              Container(
+                                                width: h*0.05,
+                                                height: h*0.05,
+                                                decoration: BoxDecoration(
+                                                  color: Colors.white,
+                                                  borderRadius: BorderRadius.circular(h),
+                                                  border: Border.all(color: Colors.blue,width:2)
+                                                ),
+                                                child: Center(child: Icon(Icons.person))
+                                              ),
+                                              SizedBox(width: w*0.02,),
+                                              Container(
+                                                width: w*0.6,
+                                                child: Text(ref.read(dataPelajarGlobal)[index]['name'])),
+                                            ],
                                           ),
-                                          SizedBox(width: w*0.02,),
-                                          Text(ref.read(dataPelajarGlobal)[index]['name']),
-                                        ],
+                                        ),
                                       ),
                                     ),
-                                  ),
+                                    InkWell(
+                                      onTap: (){
+                                        deleteData(ref.read(IDPelajarGlobal)[index]);
+                                      },
+                                      child: Container(
+                                        color: ref.read(turqose),
+                                        child: Padding(
+                                          padding: EdgeInsets.only(top: h*0.01,bottom: h*0.01 ,left: w*0.02,right: w*0.02),
+                                          child: Row(
+                                            children: [
+                                              
+                                              Container(
+                                                width: h*0.05,
+                                                height: h*0.05,
+                                                decoration: BoxDecoration(
+                                                  color: Colors.red,
+                                                  borderRadius: BorderRadius.circular(h),
+                                                  border: Border.all(color: Colors.white,width:2)
+                                                ),
+                                                child: Center(child: Icon(Icons.delete))
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               );
                           }
@@ -171,33 +248,65 @@ class _SenaraiPelajarState extends ConsumerState<SenaraiPelajar> {
                           itemBuilder: (BuildContext context, int index) {
                               return Padding(
                                 padding: EdgeInsets.only(top: h*0.01,bottom: h*0.01 ,left: w*0.0,right: w*0.0),
-                                child: InkWell(
-                                  onTap: (){
-                                    Navigator.push(context,MaterialPageRoute(builder: (context) => DetailPelajar(ref.read(dataPelajarSearch)[index]))); // mcm hyperlink
-                                  },
-                                  child: Container(
-                                    color: Colors.green,
-                                    child: Padding(
-                                      padding: EdgeInsets.only(top: h*0.01,bottom: h*0.01 ,left: w*0.04,right: w*0.04),
-                                      child: Row(
-                                        children: [
-                                          
-                                          Container(
-                                            width: h*0.05,
-                                            height: h*0.05,
-                                            decoration: BoxDecoration(
-                                              color: Colors.white,
-                                              borderRadius: BorderRadius.circular(h),
-                                              border: Border.all(color: Colors.blue,width:2)
-                                            ),
-                                            child: Center(child: Text('Log Masuk',style: TextStyle(fontSize:h*0.02,fontWeight: FontWeight.bold,color: Colors.white),textAlign: TextAlign.center,overflow: TextOverflow.ellipsis,maxLines: 6,))
+                                child: Row(
+                                  children: [
+                                    InkWell(
+                                      onTap: (){
+                                        Navigator.push(context,MaterialPageRoute(builder: (context) => DetailPelajar(ref.read(dataPelajarSearch)[index],ref.read(IDPelajarGlobal)[index]))); // mcm hyperlink
+                                      },
+                                      child: Container(
+                                        color: ref.read(turqose),
+                                        child: Padding(
+                                          padding: EdgeInsets.only(top: h*0.01,bottom: h*0.01 ,left: w*0.04,right: w*0.04),
+                                          child: Row(
+                                            children: [
+                                              
+                                              Container(
+                                                width: h*0.05,
+                                                height: h*0.05,
+                                                decoration: BoxDecoration(
+                                                  color: Colors.white,
+                                                  borderRadius: BorderRadius.circular(h),
+                                                  border: Border.all(color: Colors.blue,width:2)
+                                                ),
+                                                child: Center(child: Text('Log Masuk',style: TextStyle(fontSize:h*0.02,fontWeight: FontWeight.bold,color: Colors.white),textAlign: TextAlign.center,overflow: TextOverflow.ellipsis,maxLines: 6,))
+                                              ),
+                                              SizedBox(width: w*0.02,),
+                                              Container(
+                                                width: w*0.6,
+                                                child: Text(ref.read(dataPelajarSearch)[index]['name'])),
+                                            ],
                                           ),
-                                          SizedBox(width: w*0.02,),
-                                          Text(ref.read(dataPelajarSearch)[index]['name']),
-                                        ],
+                                        ),
                                       ),
                                     ),
-                                  ),
+                                    InkWell(
+                                      onTap: (){
+                                        deleteData(ref.read(IDPelajarSearch)[index]);
+                                      },
+                                      child: Container(
+                                        color: ref.read(turqose),
+                                        child: Padding(
+                                          padding: EdgeInsets.only(top: h*0.01,bottom: h*0.01 ,left: w*0.02,right: w*0.02),
+                                          child: Row(
+                                            children: [
+                                              
+                                              Container(
+                                                width: h*0.05,
+                                                height: h*0.05,
+                                                decoration: BoxDecoration(
+                                                  color: Colors.red,
+                                                  borderRadius: BorderRadius.circular(h),
+                                                  border: Border.all(color: Colors.white,width:2)
+                                                ),
+                                                child: Center(child: Icon(Icons.delete))
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               );
                           }

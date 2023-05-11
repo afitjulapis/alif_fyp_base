@@ -1,26 +1,54 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:e_pibg/HEP/menu_HEP.dart';
 import 'package:e_pibg/pelajar/senaraiPelajar.dart';
 import 'package:e_pibg/pembayaran/admin/pendingPayment.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttericon/font_awesome5_icons.dart';
 
+import '../Riverpod/nnotificationservice.dart';
 import '../Riverpod/user_data.dart';
-
-class DashboardAdmin extends StatefulWidget {
-  // const DashboardAdmin({ Key? key }) : super(key: key);
-
+import '../main.dart';
+class DashboardAdmin extends ConsumerStatefulWidget {
   @override
-  State<DashboardAdmin> createState() => _DashboardAdminState();
+  ConsumerState<DashboardAdmin> createState() => _DashboardAdminState();
 }
 
-class _DashboardAdminState extends State<DashboardAdmin> {
+// 2. extend [ConsumerState]
+class _DashboardAdminState extends ConsumerState<DashboardAdmin> {
+  var dataPayID;
+  void listenToDataChanges() {
+    FirebaseFirestore.instance.collection('pendingPay').snapshots().listen((snapshot) {
+      setState(() {
+        dataPayID = snapshot.docs.map((doc) => doc.data()).toList();
+        if(dataPayID.length>0){
+          Noti.showBigTextNotification(title: 'Semak Pembayaran', body: '${dataPayID.length} bayaran untuk disemak', fln: flutterLocalNotificationsPlugin);
+        }else{
+          Noti.showBigTextNotification(title: 'Semak Pembayaran', body: 'Tiada bayaran untuk disemak', fln: flutterLocalNotificationsPlugin);
+
+        }
+      });
+      
+    });
+  }
+  
+  @override
+  void initState() {
+    Noti.initialize(flutterLocalNotificationsPlugin);
+    listenToDataChanges();
+    // Noti.showBigTextNotification(title: 'title', body: 'body', fln: flutterLocalNotificationsPlugin);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     var w = MediaQuery.of(context).size.width;
     var h = MediaQuery.of(context).size.height;
     return Scaffold(
+      backgroundColor: Colors.grey[800],
       appBar: AppBar(
+        backgroundColor: ref.read(turqose),
         title:Container(
           child: Text('DASHBOARD ADMIN',style: TextStyle(fontSize:h*0.02,fontWeight: FontWeight.bold,color: Colors.black),textAlign: TextAlign.center,overflow: TextOverflow.ellipsis,maxLines: 6,)
         ), 
@@ -43,7 +71,8 @@ class _DashboardAdminState extends State<DashboardAdmin> {
                   child: InkWell(
                     onTap: (){
                       Navigator.push(context,MaterialPageRoute(builder: (context) => MenuHEP())); // mcm hyperlink
-
+                      
+                      
                     },
                     child: Container(
                       padding:  EdgeInsets.only(top: h*0.0,bottom: h*0.0 ,left: w*0.02,right: w*0.02),
@@ -65,14 +94,14 @@ class _DashboardAdminState extends State<DashboardAdmin> {
                                     height: h*0.07,
                                     padding:  EdgeInsets.only(top: h*0.0,bottom: h*0.0 ,left: w*0.04,right: w*0.04),
                                     decoration: BoxDecoration(
-                                      color: Colors.yellow,
+                                      color: ref.watch(turqose),
                                       borderRadius: BorderRadius.circular(5),
-                                      border: Border.all(color: Colors.yellow,width:2)
+                                      border: Border.all(color: ref.watch(turqose),width:2)
                                     ),
                                     child: Center(
                                       child: Container(
                                         // width: w*0.6,
-                                        child: Text('HEP',style: TextStyle(fontSize:h*0.015,fontWeight: FontWeight.bold,color: Colors.white),textAlign: TextAlign.center,overflow: TextOverflow.ellipsis,maxLines: 6,)
+                                        child: Text('HEP',style: TextStyle(fontSize:h*0.015,fontWeight: FontWeight.bold,color: Colors.black),textAlign: TextAlign.center,overflow: TextOverflow.ellipsis,maxLines: 6,)
                                       ),
                                     ),
                                   ),
@@ -89,11 +118,11 @@ class _DashboardAdminState extends State<DashboardAdmin> {
                                 height: h*0.1,
                                 padding:  EdgeInsets.only(top: h*0.0,bottom: h*0.0 ,left: w*0.04,right: w*0.04),
                                 decoration: BoxDecoration(
-                                  color: Colors.white,
+                                  color: Colors.grey[800],
                                   borderRadius: BorderRadius.circular(h),
-                                  border: Border.all(color: Colors.yellow,width:2)
+                                  border: Border.all(color: ref.watch(turqose),width:2)
                                 ),
-                                child: Icon(FontAwesome5.sitemap,color: Colors.yellow, size: h*0.03,)
+                                child: Icon(FontAwesome5.sitemap,color: ref.watch(turqose), size: h*0.03,)
                               ),
                             ],
                           ),
@@ -105,10 +134,12 @@ class _DashboardAdminState extends State<DashboardAdmin> {
                   ),
                 ),
                 
+                
                 Expanded(
                   child: Consumer(builder: (context, ref, child) {
                     return ref.watch(getPendPay(ref)).when(
                       data: (data){
+                        
                         return InkWell(
                           onTap: (){
                             Navigator.push(context,MaterialPageRoute(builder: (context) => PengesahanRekodBayaran())); // mcm hyperlink
@@ -133,14 +164,14 @@ class _DashboardAdminState extends State<DashboardAdmin> {
                                           height: h*0.07,
                                           padding:  EdgeInsets.only(top: h*0.0,bottom: h*0.0 ,left: w*0.04,right: w*0.04),
                                           decoration: BoxDecoration(
-                                            color: Colors.green,
+                                            color: ref.watch(turqose),
                                             borderRadius: BorderRadius.circular(5),
-                                            border: Border.all(color: Colors.green,width:2)
+                                            border: Border.all(color: ref.watch(turqose),width:2)
                                           ),
                                           child: Center(
                                             child: Container(
                                               // width: w*0.6,
-                                              child: Text('PEMBAYARAN',style: TextStyle(fontSize:h*0.015,fontWeight: FontWeight.bold,color: Colors.white),textAlign: TextAlign.center,overflow: TextOverflow.ellipsis,maxLines: 6,)
+                                              child: Text('PEMBAYARAN',style: TextStyle(fontSize:h*0.015,fontWeight: FontWeight.bold,color: Colors.black),textAlign: TextAlign.center,overflow: TextOverflow.ellipsis,maxLines: 6,)
                                             ),
                                           ),
                                         ),
@@ -159,11 +190,11 @@ class _DashboardAdminState extends State<DashboardAdmin> {
                                       height: h*0.1,
                                       padding:  EdgeInsets.only(top: h*0.0,bottom: h*0.0 ,left: w*0.04,right: w*0.04),
                                       decoration: BoxDecoration(
-                                        color: Colors.white,
+                                        color: Colors.grey[800],
                                         borderRadius: BorderRadius.circular(h),
-                                        border: Border.all(color: Colors.green,width:2)
+                                        border: Border.all(color: ref.watch(turqose),width:2)
                                       ),
-                                      child: Icon(FontAwesome5.money_bill,color: Colors.green, size: h*0.03,)
+                                      child: Icon(FontAwesome5.money_bill,color: ref.watch(turqose), size: h*0.03,)
                                     ),
                                   ],
                                 ),
@@ -180,7 +211,7 @@ class _DashboardAdminState extends State<DashboardAdmin> {
                                         borderRadius: BorderRadius.circular(h),
                                         border: Border.all(color: Colors.red,width:2)
                                       ),
-                                      child: Center(child: Text(data.length.toString(),style: TextStyle(fontSize:h*0.02,fontWeight: FontWeight.bold,color: Colors.white),textAlign: TextAlign.center,overflow: TextOverflow.ellipsis,maxLines: 6,))
+                                      child: Center(child: Text(dataPayID.length.toString(),style: TextStyle(fontSize:h*0.02,fontWeight: FontWeight.bold,color: Colors.white),textAlign: TextAlign.center,overflow: TextOverflow.ellipsis,maxLines: 6,))
                                     ),
                                   ],
                                 ),
@@ -195,7 +226,7 @@ class _DashboardAdminState extends State<DashboardAdmin> {
                         return Text(error.toString());
                       }, 
                       loading: (){
-                        return Center(child: CircularProgressIndicator(color: Colors.green,));
+                        return Center(child: CircularProgressIndicator(color: ref.watch(turqose),));
                       }
                     );
                   },),
@@ -211,7 +242,7 @@ class _DashboardAdminState extends State<DashboardAdmin> {
                       data: (data){
                         return Container(
                           // width: w*0.6,
-                          child: Text('Jumlah Pelajar: '+data.length.toString(),style: TextStyle(fontSize:h*0.02,fontWeight: FontWeight.bold,color: Colors.black),textAlign: TextAlign.center,overflow: TextOverflow.ellipsis,maxLines: 6,)
+                          child: Text('Jumlah Pelajar: '+data.length.toString(),style: TextStyle(fontSize:h*0.025,fontWeight: FontWeight.bold,color: Colors.white),textAlign: TextAlign.center,overflow: TextOverflow.ellipsis,maxLines: 6,)
                         );
                       }, 
                       error: (e,st){

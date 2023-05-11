@@ -1,24 +1,30 @@
+import 'package:e_pibg/HEP/edit_pelajar.dart';
+import 'package:e_pibg/Riverpod/user_data.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fluttericon/font_awesome5_icons.dart';
 
-class DetailPelajar extends StatefulWidget {
+class DetailPelajar extends ConsumerStatefulWidget {
   final dataPelajar;
-  DetailPelajar(this.dataPelajar);
+  final idPelajar;
 
+  DetailPelajar(this.dataPelajar,this.idPelajar);
   @override
-  State<DetailPelajar> createState() => _DetailPelajarState();
+  ConsumerState<DetailPelajar> createState() => _DetailPelajarState();
 }
 
-class _DetailPelajarState extends State<DetailPelajar> {
+// 2. extend [ConsumerState]
+class _DetailPelajarState extends ConsumerState<DetailPelajar> {
   @override
   Widget build(BuildContext context) {
     var w = MediaQuery.of(context).size.width;
     var h = MediaQuery.of(context).size.height;
     return Scaffold(
+      backgroundColor: Colors.grey[800],
       appBar: AppBar(
-        backgroundColor: Colors.green,
+        backgroundColor: ref.read(turqose),
         title:Container(
-          child: Text('MAKLUMAT PELAJAR',style: TextStyle(fontSize:h*0.02,fontWeight: FontWeight.bold,color: Colors.black),textAlign: TextAlign.center,overflow: TextOverflow.ellipsis,maxLines: 6,)
+          child: Text('MAKLUMAT PELAJAR',style: TextStyle(fontSize:h*0.025,fontWeight: FontWeight.bold,color: Colors.black),textAlign: TextAlign.center,overflow: TextOverflow.ellipsis,maxLines: 6,)
         ), 
         leading: InkWell(
           onTap: (){
@@ -26,6 +32,15 @@ class _DetailPelajarState extends State<DetailPelajar> {
           },
           child: Icon(FontAwesome5.arrow_left)
         ),
+        actions: [
+          InkWell(
+            onTap: (){
+              Navigator.push(context,MaterialPageRoute(builder: (context) => EditPelajar(widget.dataPelajar,widget.idPelajar))); // mcm hyperlink
+            },
+            child: Icon(FontAwesome5.edit)
+          ),
+          SizedBox(width: w*0.04,)
+        ],
       ),
       body: SafeArea(
         child: Column(
@@ -36,12 +51,12 @@ class _DetailPelajarState extends State<DetailPelajar> {
               height: h*0.1,
               padding:  EdgeInsets.only(top: h*0.0,bottom: h*0.0 ,left: w*0.04,right: w*0.04),
               decoration: BoxDecoration(
-                color: Colors.yellow,
+                color: ref.read(turqose),
                 borderRadius: BorderRadius.circular(h),
-                border: Border.all(color: Colors.yellow,width:2)
+                border: Border.all(color: ref.read(turqose),width:2)
               ),
               child: Center(
-                child: Icon(FontAwesome5.user_astronaut,color: Colors.grey, size: h*0.03,)
+                child: Icon(FontAwesome5.user_astronaut,color: Colors.black, size: h*0.03,)
               ),
             ),
             Padding(
@@ -69,7 +84,7 @@ class _DetailPelajarState extends State<DetailPelajar> {
                               // width: w*0.6,
                               child: Row(
                                 children: [
-                                  Text('Nama Pelajar : ',style: TextStyle(fontSize:h*0.02,fontWeight: FontWeight.bold,color: Colors.black),textAlign: TextAlign.start,overflow: TextOverflow.ellipsis,maxLines: 6,),
+                                  Text('Nama Pelajar : ',style: TextStyle(fontSize:h*0.025,fontWeight: FontWeight.bold,color: Colors.white),textAlign: TextAlign.start,overflow: TextOverflow.ellipsis,maxLines: 6,),
                                   
                                 ],
                               )
@@ -78,7 +93,7 @@ class _DetailPelajarState extends State<DetailPelajar> {
                               // width: w*0.6,
                               child: Row(
                                 children: [
-                                  Text(widget.dataPelajar['name'],style: TextStyle(fontSize:h*0.02,fontWeight: FontWeight.normal,color: Colors.black),textAlign: TextAlign.start,overflow: TextOverflow.ellipsis,maxLines: 6,),
+                                  Expanded(child: Text(widget.dataPelajar['name'],style: TextStyle(fontSize:h*0.025,fontWeight: FontWeight.normal,color: Colors.white),textAlign: TextAlign.start,overflow: TextOverflow.ellipsis,maxLines: 6,)),
                                   
                                 ],
                               )
@@ -89,7 +104,7 @@ class _DetailPelajarState extends State<DetailPelajar> {
                               // width: w*0.6,
                               child: Row(
                                 children: [
-                                  Text('No Kad Pengenalan :',style: TextStyle(fontSize:h*0.02,fontWeight: FontWeight.bold,color: Colors.black),textAlign: TextAlign.start,overflow: TextOverflow.ellipsis,maxLines: 6,),
+                                  Text('No Kad Pengenalan :',style: TextStyle(fontSize:h*0.025,fontWeight: FontWeight.bold,color: Colors.white),textAlign: TextAlign.start,overflow: TextOverflow.ellipsis,maxLines: 6,),
                                 ],
                               )
                             ),
@@ -97,7 +112,7 @@ class _DetailPelajarState extends State<DetailPelajar> {
                               // width: w*0.6,
                               child: Row(
                                 children: [
-                                  Text(widget.dataPelajar['ic'],style: TextStyle(fontSize:h*0.02,fontWeight: FontWeight.normal,color: Colors.black),textAlign: TextAlign.start,overflow: TextOverflow.ellipsis,maxLines: 6,),
+                                  Text(widget.dataPelajar['ic'],style: TextStyle(fontSize:h*0.025,fontWeight: FontWeight.normal,color: Colors.white),textAlign: TextAlign.start,overflow: TextOverflow.ellipsis,maxLines: 6,),
                                   
                                 ],
                               )
@@ -108,7 +123,7 @@ class _DetailPelajarState extends State<DetailPelajar> {
                               // width: w*0.6,
                               child: Row(
                                 children: [
-                                  Text('Tahap :',style: TextStyle(fontSize:h*0.02,fontWeight: FontWeight.bold,color: Colors.black),textAlign: TextAlign.start,overflow: TextOverflow.ellipsis,maxLines: 6,),
+                                  Text('Tahap :',style: TextStyle(fontSize:h*0.025,fontWeight: FontWeight.bold,color: Colors.white),textAlign: TextAlign.start,overflow: TextOverflow.ellipsis,maxLines: 6,),
                                 ],
                               )
                             ),
@@ -116,7 +131,7 @@ class _DetailPelajarState extends State<DetailPelajar> {
                               // width: w*0.6,
                               child: Row(
                                 children: [
-                                  Text(widget.dataPelajar['tahap'].isEmpty? 'Tidak Dinyatakan':widget.dataPelajar['tahap'],style: TextStyle(fontSize:h*0.02,fontWeight: FontWeight.normal,color: Colors.black),textAlign: TextAlign.start,overflow: TextOverflow.ellipsis,maxLines: 6,),
+                                  Text(widget.dataPelajar['tahap'].isEmpty? 'Tidak Dinyatakan':widget.dataPelajar['tahap'],style: TextStyle(fontSize:h*0.025,fontWeight: FontWeight.normal,color: Colors.white),textAlign: TextAlign.start,overflow: TextOverflow.ellipsis,maxLines: 6,),
                                   
                                 ],
                               )
@@ -133,23 +148,23 @@ class _DetailPelajarState extends State<DetailPelajar> {
             ),
 
             Padding(
-              padding: EdgeInsets.only(top: h*0.01,bottom: h*0.01 ,left: w*0.04,right: w*0.04),
+              padding: EdgeInsets.only(top: h*0.01,bottom: h*0.01 ,left: w*0.0,right: w*0.0),
               child: Row(
                 children: [
                   Expanded(
                     child: Container(
-                      // width: w*0.3,
+                      width: w,
                       height: h*0.07,
                       padding:  EdgeInsets.only(top: h*0.0,bottom: h*0.0 ,left: w*0.04,right: w*0.04),
                       decoration: BoxDecoration(
-                        color: Colors.green,
+                        color: ref.read(turqose),
                         borderRadius: BorderRadius.circular(5),
-                        // border: Border.all(color: Colors.yellow,width:2)
+                        // border: Border.all(color: ref.read(turqose),width:2)
                       ),
                       child: Center(
                         child: Container(
                           // width: w*0.6,
-                          child: Text('SUBJEK DIPILIH',style: TextStyle(fontSize:h*0.02,fontWeight: FontWeight.bold,color: Colors.black),textAlign: TextAlign.center,overflow: TextOverflow.ellipsis,maxLines: 6,)
+                          child: Text('SUBJEK DIPILIH',style: TextStyle(fontSize:h*0.025,fontWeight: FontWeight.bold,color: Colors.black),textAlign: TextAlign.center,overflow: TextOverflow.ellipsis,maxLines: 6,)
                         ),
                       ),
                     ),
@@ -158,24 +173,24 @@ class _DetailPelajarState extends State<DetailPelajar> {
               ),
             ),
             SizedBox(height: h*0.01,),
-            Padding(
-              padding: EdgeInsets.only(top: h*0.0,bottom: h*0.0 ,left: w*0.08,right: w*0.04),
-              child: Container(
-                // width: w*0.6,
-                child: Row(
-                  children: [
-                    Text('Subjek :',style: TextStyle(fontSize:h*0.02,fontWeight: FontWeight.bold,color: Colors.black),textAlign: TextAlign.start,overflow: TextOverflow.ellipsis,maxLines: 6,),
-                  ],
-                )
-              ),
-            ),
+            // Padding(
+            //   padding: EdgeInsets.only(top: h*0.0,bottom: h*0.0 ,left: w*0.08,right: w*0.04),
+            //   child: Container(
+            //     // width: w*0.6,
+            //     child: Row(
+            //       children: [
+            //         Text('Subjek :',style: TextStyle(fontSize:h*0.025,fontWeight: FontWeight.bold,color: Colors.white),textAlign: TextAlign.start,overflow: TextOverflow.ellipsis,maxLines: 6,),
+            //       ],
+            //     )
+            //   ),
+            // ),
             Padding(
               padding: EdgeInsets.only(top: h*0.0,bottom: h*0.01 ,left: w*0.08,right: w*0.04),
               child: Container(
                 // width: w*0.6,
                 child: Row(
                   children: [
-                    Expanded(child: Text(widget.dataPelajar['subjek'].isEmpty? 'Tidak Dinyatakan':widget.dataPelajar['subjek'].toString(),style: TextStyle(fontSize:h*0.02,fontWeight: FontWeight.normal,color: Colors.black),textAlign: TextAlign.start,overflow: TextOverflow.ellipsis,maxLines: 6,)),
+                    Expanded(child: Text(widget.dataPelajar['subjek'].isEmpty? 'Tidak Dinyatakan':widget.dataPelajar['subjek'].toString(),style: TextStyle(fontSize:h*0.03,fontWeight: FontWeight.normal,color: Colors.white),textAlign: TextAlign.start,overflow: TextOverflow.ellipsis,maxLines: 6,)),
                     
                   ],
                 )
@@ -184,56 +199,56 @@ class _DetailPelajarState extends State<DetailPelajar> {
 
             
 
-            Padding(
-              padding: EdgeInsets.only(top: h*0.01,bottom: h*0.01 ,left: w*0.04,right: w*0.04),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Container(
-                      // width: w*0.3,
-                      height: h*0.07,
-                      padding:  EdgeInsets.only(top: h*0.0,bottom: h*0.0 ,left: w*0.04,right: w*0.04),
-                      decoration: BoxDecoration(
-                        color: Colors.blue,
-                        borderRadius: BorderRadius.circular(5),
-                        // border: Border.all(color: Colors.yellow,width:2)
-                      ),
-                      child: Center(
-                        child: Container(
-                          // width: w*0.6,
-                          child: Text('MAKLUMAT IBU BAPA',style: TextStyle(fontSize:h*0.02,fontWeight: FontWeight.bold,color: Colors.black),textAlign: TextAlign.center,overflow: TextOverflow.ellipsis,maxLines: 6,)
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
+            // Padding(
+            //   padding: EdgeInsets.only(top: h*0.01,bottom: h*0.01 ,left: w*0.04,right: w*0.04),
+            //   child: Row(
+            //     children: [
+            //       Expanded(
+            //         child: Container(
+            //           // width: w*0.3,
+            //           height: h*0.07,
+            //           padding:  EdgeInsets.only(top: h*0.0,bottom: h*0.0 ,left: w*0.04,right: w*0.04),
+            //           decoration: BoxDecoration(
+            //             color: Colors.blue,
+            //             borderRadius: BorderRadius.circular(5),
+            //             // border: Border.all(color: ref.read(turqose),width:2)
+            //           ),
+            //           child: Center(
+            //             child: Container(
+            //               // width: w*0.6,
+            //               child: Text('MAKLUMAT IBU BAPA',style: TextStyle(fontSize:h*0.025,fontWeight: FontWeight.bold,color: Colors.black),textAlign: TextAlign.center,overflow: TextOverflow.ellipsis,maxLines: 6,)
+            //             ),
+            //           ),
+            //         ),
+            //       ),
+            //     ],
+            //   ),
+            // ),
 
-            SizedBox(height: h*0.01,),
-            Padding(
-              padding: EdgeInsets.only(top: h*0.0,bottom: h*0.0 ,left: w*0.08,right: w*0.04),
-              child: Container(
-                // width: w*0.6,
-                child: Row(
-                  children: [
-                    Text('No Telefon Penjaga :',style: TextStyle(fontSize:h*0.02,fontWeight: FontWeight.bold,color: Colors.black),textAlign: TextAlign.start,overflow: TextOverflow.ellipsis,maxLines: 6,),
-                  ],
-                )
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.only(top: h*0.0,bottom: h*0.0 ,left: w*0.08,right: w*0.04),
-              child: Container(
-                // width: w*0.6,
-                child: Row(
-                  children: [
-                    Text(widget.dataPelajar['phone'].isEmpty? 'Tidak Dinyatakan':widget.dataPelajar['phone'].toString(),style: TextStyle(fontSize:h*0.02,fontWeight: FontWeight.normal,color: Colors.black),textAlign: TextAlign.start,overflow: TextOverflow.ellipsis,maxLines: 6,),
+            // SizedBox(height: h*0.01,),
+            // Padding(
+            //   padding: EdgeInsets.only(top: h*0.0,bottom: h*0.0 ,left: w*0.08,right: w*0.04),
+            //   child: Container(
+            //     // width: w*0.6,
+            //     child: Row(
+            //       children: [
+            //         Text('No Telefon Penjaga :',style: TextStyle(fontSize:h*0.025,fontWeight: FontWeight.bold,color: Colors.black),textAlign: TextAlign.start,overflow: TextOverflow.ellipsis,maxLines: 6,),
+            //       ],
+            //     )
+            //   ),
+            // ),
+            // Padding(
+            //   padding: EdgeInsets.only(top: h*0.0,bottom: h*0.0 ,left: w*0.08,right: w*0.04),
+            //   child: Container(
+            //     // width: w*0.6,
+            //     child: Row(
+            //       children: [
+            //         Text(widget.dataPelajar['phone'].isEmpty? 'Tidak Dinyatakan':widget.dataPelajar['phone'].toString(),style: TextStyle(fontSize:h*0.025,fontWeight: FontWeight.normal,color: Colors.black),textAlign: TextAlign.start,overflow: TextOverflow.ellipsis,maxLines: 6,),
                     
-                  ],
-                )
-              ),
-            ),
+            //       ],
+            //     )
+            //   ),
+            // ),
           ],
         ),
       ),

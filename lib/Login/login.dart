@@ -17,6 +17,68 @@ class _LoginState extends ConsumerState<Login> {
   String password='';
   bool _isLoading = false;
 
+  void resetPassword(String email) {
+    if(email.isEmpty){
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text("Email Tidak Diisi"),
+            content: Text('Sila isikan emel akaun anda dan tekan "Lupa Katalaluan"' ),
+            actions: <Widget>[
+              TextButton(
+                child: Text('Tutup'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+    }else{
+      FirebaseAuth.instance.sendPasswordResetEmail(email: email).then((value) {
+        print('Password reset email sent successfully!');
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text("Email Dihantar"),
+              content: Text('Sila semak emel anda untuk kemaskini katalaluan' ),
+              actions: <Widget>[
+                TextButton(
+                  child: Text('Tutup'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            );
+          },
+        );
+      }).catchError((error) {
+        showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text("ralat"),
+            content: Text(error ),
+            actions: <Widget>[
+              TextButton(
+                child: Text('Tutup'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+      });
+    }
+    
+  }
+
   void _signInWithEmailAndPassword() async {
     setState(() {
       _isLoading = true;
@@ -30,8 +92,8 @@ class _LoginState extends ConsumerState<Login> {
       );
       print('User logged in with uid: ${userCredential.user!.uid}');
       ref.read(userUID.notifier).state=userCredential.user!.uid;
-      // Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => DashboardAdmin())); // LOGIN ADMIN
-      Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => DashboardUser())); // LOGIN USER
+      Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => DashboardAdmin())); // LOGIN ADMIN
+      // Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => DashboardUser())); // LOGIN USER
       // Navigate to HomeScreen on successful login
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
@@ -358,6 +420,21 @@ class _LoginState extends ConsumerState<Login> {
             ),
             SizedBox(height: h*0.02,),
 
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                InkWell(
+                  onTap: (){
+                    resetPassword(email);
+                  },
+                  child: Container(
+                    width: w*0.6,
+                    child: Text('Lupa Katalaluan?',style: TextStyle(fontSize:h*0.015,fontWeight: FontWeight.bold,color: Colors.grey),textAlign: TextAlign.center,overflow: TextOverflow.ellipsis,maxLines: 6,)
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: h*0.02,),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
